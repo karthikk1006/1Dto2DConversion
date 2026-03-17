@@ -1,0 +1,513 @@
+"""
+HP_TUNING_GUIDE.md
+==================
+
+Complete Guide to Hyperparameter Tuning for 1D-to-2D Classification Pipeline
+
+OVERVIEW
+--------
+This guide walks you through the entire hyperparameter tuning workflow using Optuna
+to find optimal configurations for both EfficientNet and CNN models across all datasets.
+
+The workflow consists of three stages:
+  1. HP_TUNING.PY   → Find optimal hyperparameters using Optuna
+  2. TRAIN_WITH_TUNING.PY → Train models using the tuned hyperparameters
+  3. COMPARE_METRICS.PY → Compare results with baseline
+
+═══════════════════════════════════════════════════════════════════════════════
+STAGE 1: HYPERPARAMETER TUNING (hp_tuning.py)
+═══════════════════════════════════════════════════════════════════════════════
+
+This script uses Optuna to search for optimal hyperparameters for each
+(model_type, dataset) combination.
+
+HYPERPARAMETERS TUNED
+─────────────────────
+Learning Rate:
+  • Range: 1e-5 to 1e-2 (log scale)
+  • Default: 8e-4 (from NCTD paper)
+  • Impact: Critical - controls training speed/stability
+
+Batch Size:
+  • Options: 32, 64, 128, 256
+  • Default: 64
+  • Impact: Affects gradient stability and memory usage
+
+Weight Decay (L2 Regularization):
+  • Range: 1e-5 to 1e-2 (log scale)
+  • Default: 0.0 (no regularization)
+  • Impact: Prevents overfitting
+
+Optimizer:
+  • Options: Adam (with β1=0.9, β2=0.999)
+           SGD (with momentum)
+  • Default: Adam
+  • Impact: Algorithm used for gradient updates
+
+SGD Momentum (if SGD selected):
+  • Range: 0.8 to 0.99
+  • Default: 0.9
+  • Impact: Accelerates convergence
+
+Learning Rate Scheduler:
+  • Options:
+    - none: Constant learning rate
+    - step: Multiply by gamma every step_size epochs
+    - cosine: Annealing decay over full training
+    - exponential: Continuous exponential decay
+  • Typical: step or cosine works best
+  • Impact: Can significantly improve final accuracy
+
+Number of Epochs:
+  • Range: 20 to 60
+  • Default: 30
+  • Impact: Higher epochs → better convergence but longer training
+
+Dropout Rate (CNN only):
+  • Range: 0.0 to 0.5
+  • Default: 0.0 (no dropout)
+  • Impact: Prevents overfitting in deep networks
+
+
+USAGE EXAMPLES
+──────────────
+
+1. QUICK TEST (10 trials, 1 model, 1 dataset)
+   ──────────────────────────────────────────
+   python hp_tuning.py --model efficientnet --n-trials 10
+
+   Expected time: 5-10 minutes
+   Output: Basic tuning results to debug setup
+
+2. SINGLE MODEL - ALL DATASETS (100 trials each)
+   ──────────────────────────────────────────────
+   python hp_tuning.py --model efficientnet --n-trials 100
+
+   Expected time: 2-4 hours (depending on dataset sizes)
+   Output: 45 hp_tuning/ folders with best_params_*.json
+
+3. BOTH MODELS - ALL DATASETS (100 trials, parallel)
+   ────────────────────────────────────────────────
+   python hp_tuning.py --all --n-trials 100 --n-jobs 4
+
+   Expected time: 4-8 hours total (parallelized)
+   Output: 90+ hyperparameter configurations
+
+4. SPECIFIC DATASET
+   ────────────────
+   python hp_tuning.py --all --dataset 13_rotated_rastrigin_50d.npz --n-trials 50
+
+   Expected time: 20-40 minutes
+   Output: Tuned params for both models on one dataset
+
+
+COMMAND-LINE OPTIONS
+─────────────────────
+
+--model EFFICIENTNET|NCTD_CNN
+    Model to tune. Must specify either --model or --all.
+
+--all
+    Tune both models (efficientnet and nctd_cnn).
+
+--dataset FILENAME
+    Tune only a specific dataset (e.g., "13_rotated_rastrigin_50d.npz").
+    If omitted, tunes on all 45 datasets.
+
+--method OURS|NCTD
+    Conversion method (default: ours).
+
+--n-trials N
+    Number of Optuna trials per (model, dataset) pair.
+    Default: 100
+    Recommendation: 50-100 for good coverage
+    Note: Runtime increases linearly with n_trials
+
+--n-jobs N
+    Number of parallel jobs for Optuna optimization.
+    Default: 1 (sequential)
+    Recommendation: 2-4 (limited by GPU memory)
+    Warning: Each parallel job uses separate GPU memory
+
+
+OUTPUT FILES
+────────────
+results/hp_tuning/
+├── efficientnet/
+│   ├── best_params_13_rotated_rastrigin_50d.json      ← Best hyperparams
+│   ├── tuning_history_13_rotated_rastrigin_50d.json   ← All trials
+│   ├── best_params_digen1_6265.json
+│   ├── tuning_history_digen1_6265.json
+│   ├── ... (45 datasets total)
+│   └── logs/
+│       ├── tuning_13_rotated_rastrigin_50d_YYYYMMDD_HHMMSS.log
+│       └── ... (detailed logs for each dataset)
+├── cnn/
+│   ├── best_params_*.json
+│   ├── tuning_history_*.json
+│   └── logs/
+└── reports/
+    ├── hp_tuning_summary.json        ← Summary of all tuning
+    ├── hp_tuning_report.txt          ← Human-readable report
+    └── logs/
+
+EACH best_params_*.json CONTAINS:
+{
+  "batch_size": 64,
+  "epochs": 35,
+  "learning_rate": 0.000523,
+  "optimizer": "adam",
+  "scheduler": "cosine",
+  "scheduler_t_max": 25,
+  "weight_decay": 0.00234
+}
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STAGE 2: TRAIN WITH TUNED HYPERPARAMETERS (train_with_tuning.py)
+═══════════════════════════════════════════════════════════════════════════════
+
+This script trains models using the hyperparameters found in Stage 1.
+Results are saved separately for easy comparison with baseline.
+
+KEY FEATURES
+────────────
+• Automatically loads best hyperparameters from hp_tuning results
+• Gracefully falls back to defaults if tuning not available
+• Saves hyperparameters used alongside metrics (for reproducibility)
+• Tracks training progress with tqdm bars
+• Detailed logging for debugging
+
+
+USAGE EXAMPLES
+──────────────
+
+1. Train both models, all datasets with TUNED hyperparameters
+   ──────────────────────────────────────────────────────────
+   python train_with_tuning.py --all
+
+   Expected time: 4-6 hours
+   Output: tuned_results/
+
+2. Train single model
+   ──────────────────
+   python train_with_tuning.py --method ours --model efficientnet
+
+   Expected time: 1-2 hours
+   Output: Tuned results for EfficientNet + ours
+
+3. Train on specific dataset
+   ─────────────────────────
+   python train_with_tuning.py --all --dataset 13_rotated_rastrigin_50d.npz
+
+   Expected time: 5-15 minutes
+   Output: Quick comparison on single dataset
+
+4. Quick test
+   ──────────
+   python train_with_tuning.py --model nctd_cnn --dataset 13_rotated_rastrigin_50d.npz
+
+   Expected time: 1-2 minutes
+   Output: Single model/dataset for verification
+
+
+OUTPUT STRUCTURE
+────────────────
+results/tuned_results/
+├── efficientnet/
+│   ├── ours/
+│   │   ├── metrics/
+│   │   │   ├── ours_efficientnet_13_rotated_rastrigin_50d_metrics.json
+│   │   │   ├── ours_efficientnet_13_rotated_rastrigin_50d_hyperparams.json
+│   │   │   └── ...
+│   │   └── models/
+│   │       └── ...
+│   └── nctd/
+│       ├── metrics/
+│       └── models/
+├── cnn/
+│   ├── ours/
+│   │   ├── metrics/
+│   │   └── models/
+│   └── nctd/
+│       ├── metrics/
+│       └── models/
+└── comparison/
+    ├── tuned_vs_default_summary.json
+    └── tuned_vs_default_report.txt
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STAGE 3: COMPARISON & ANALYSIS (compare_metrics.py)
+═══════════════════════════════════════════════════════════════════════════════
+
+This script compares results from:
+  • Baseline (default hyperparameters)
+  • Tuned (optimized hyperparameters)
+
+GENERATES
+─────────
+✓ Comparison tables (accuracy, F1, precision, recall, etc.)
+✓ Win-count analysis (how often tuned beat baseline)
+✓ Visualization plots
+✓ Statistical summaries
+
+
+QUICK WORKFLOW EXAMPLE FOR USERS
+═════════════════════════════════
+
+STEP 1: HP Tuning (first time only)
+───────────────────────────────────
+Run once to find optimal hyperparameters. Can skip if you already have them.
+
+$ python hp_tuning.py --all --n-trials 100 --n-jobs 4
+  ✓ Takes 4-8 hours
+  ✓ Saves best_params_*.json files
+  ✓ Run in background: time python hp_tuning.py --all > tuning.log 2>&1 &
+
+STEP 2: Train with Tuned Hyperparameters
+─────────────────────────────────────────
+
+$ python train_with_tuning.py --all
+  ✓ Takes 4-6 hours
+  ✓ Uses optimized hyperparameters
+  ✓ Saves results in tuned_results/
+
+STEP 3: Verify Results
+──────────────────────
+
+$ python compare_metrics.py
+  ✓ Generates comparison visualizations
+  ✓ Shows improvement over baseline
+  ✓ Produces tables and plots
+
+
+INTERPRETING RESULTS
+═════════════════════
+
+Key Metrics:
+  • Accuracy: Overall correctness (primary metric)
+  • F1 Score: Harmonic mean of precision/recall (handles imbalance)
+  • ROC-AUC: Probabilistic discrimination ability
+  • MCC: Matthews Correlation Coefficient (balanced metric)
+
+Expected Improvements:
+  • Small datasets (100-1000 samples): 2-5% improvement
+  • Medium datasets (1000-10000 samples): 1-3% improvement
+  • Large datasets (>10000 samples): 0.5-2% improvement
+
+Why Tuning Helps:
+  ✓ Different datasets have different optimal configurations
+  ✓ Learning rate can make or break convergence
+  ✓ Batch size affects gradient quality
+  ✓ Scheduler can unlock hidden performance
+
+
+HYPERPARAMETER INSIGHTS
+════════════════════════
+
+Common Tuning Results:
+  • Learning rates often cluster around: 1e-4 to 5e-3
+  • Batch size rarely exceeds 128 (GPU memory limits)
+  • Cosine annealing often outperforms step decay
+  • Dropout helps CNN more than EfficientNet
+  • SGD with momentum sometimes beats Adam on smaller datasets
+
+Dataset Dependencies:
+  • Larger datasets benefit from higher lr and more epochs
+  • Imbalanced datasets prefer lower batch sizes
+  • High-dimensional transformed data needs regularization (weight_decay)
+
+
+ADVANCED USAGE
+═══════════════
+
+1. Resume Interrupted Tuning
+   ─────────────────────────
+   Optuna studies support resuming - rerun same command:
+   $ python hp_tuning.py --all --n-trials 200
+   (Continues from previous n_trials)
+
+2. Custom Tuning Parameters
+   ──────────────────────────
+   Edit hp_tuning.py suggest_hyperparams() function to customize:
+   • Parameter ranges
+   • Suggested values
+   • Model-specific options
+
+3. Different Random Seeds
+   ──────────────────────
+   For more robust tuning:
+   $ python hp_tuning.py --all --n-trials 50  # seed=42 (default)
+   Then modify seed and re-tune on different data splits
+
+4. Multi-Objective Optimization
+   ─────────────────────────────
+   Current script optimizes validation accuracy.
+   Could modify to optimize: F1, balanced_accuracy, or combined metrics
+
+
+TROUBLESHOOTING
+════════════════
+
+Out of Memory (OOM) Errors
+──────────────────────────
+  Symptom: CUDA out of memory during tuning
+  Solution:
+    - Reduce batch_size range: --batch-sizes "32,64" (in code)
+    - Reduce n-jobs: use --n-jobs 1 or 2
+    - Reduce n-trials: use --n-trials 50
+
+Slow Tuning
+────────────
+  Symptom: Individual trials take >1 hour
+  Solution:
+    - Reduce epochs range in suggest_hyperparams() (20-40 instead of 20-60)
+    - Increase n-jobs for parallelization
+    - Use smaller dataset subset (--dataset option)
+
+Inconsistent Results Across Runs
+─────────────────────────────────
+  Symptom: Different best hyperparameters each run
+  Solution:
+    - Set random seed: modify seed=42 in hp_tuning.py
+    - Use more trials: increase --n-trials
+    - Check dataset splits are consistent (fixed random_state=42)
+
+Best Hyperparams Not Improving Accuracy
+────────────────────────────────────────
+  Symptom: Tuned results similar to or worse than baseline
+  Possible causes:
+    - Baseline already well-tuned
+    - Dataset doesn't benefit from tuning (well-behaved)
+    - Need more trials (insufficient search)
+    - Try: --n-trials 200 or more
+
+
+ENVIRONMENT REQUIREMENTS
+═════════════════════════
+
+Python Packages:
+  • torch, torchvision (deep learning)
+  • numpy, pandas (data handling)
+  • scikit-learn (metrics, splitting)
+  • optuna, sqlalchemy (hyperparameter tuning)
+  • matplotlib, seaborn (visualization)
+  • tqdm (progress bars)
+
+Install all:
+  $ pip install -r requirements.txt
+
+GPU Recommended:
+  • NVIDIA GPU with CUDA support (highly recommended)
+  • CPU will work but training will be 10-50x slower
+  • Recommended: NVIDIA GPU with ≥8GB VRAM
+
+
+EXPECTED RUNTIME SUMMARY
+════════════════════════
+
+Setup (one-time):
+  • Python environment + packages: 10-20 minutes
+
+Per Dataset (45 total):
+  • HP Tuning (100 trials):
+    - EfficientNet: ~10-15 minutes per dataset = 8-12 hours
+    - CNN: ~8-12 minutes per dataset = 6-9 hours
+    - Both parallel (n-jobs=4): ~4-8 hours total
+
+  • Training with Tuned Params:
+    - ~5 minutes per (model, dataset) pair
+    - 2 models × 45 datasets × 5 min = 7.5 hours per method
+    - Both methods × 2 combos = ~10 hours total
+
+Complete Workflow:
+  • First time setup: 4-8 hours (tuning) + 10 hours (training) = 14-18 hours
+  • Subsequent runs: 10 hours (only training, reuse tuned params)
+
+
+BEST PRACTICES
+════════════════
+
+1. Start Small
+   ──────────
+   Begin with few trials (--n-trials 10) to verify setup works
+
+2. Monitor GPU
+   ──────────
+   Watch GPU memory and utilization:
+   $ watch -n 1 nvidia-smi
+
+3. Save Logs
+   ───────────
+   Capture output for debugging:
+   $ python script.py > output.log 2>&1
+
+4. Version Control
+   ────────────────
+   Save hyperparameter configurations:
+   $ cp -r results/hp_tuning results/hp_tuning_backup_v1
+
+5. Iterate
+   ───────
+   Start with defaults → tune → analyze → refine ranges → repeat
+
+
+═══════════════════════════════════════════════════════════════════════════════
+COMPLETE EXAMPLE: Running Full Workflow
+═════════════════════════════════════════
+
+# Terminal 1: Start HP Tuning (foreground or background)
+$ time python hp_tuning.py --all --n-trials 100 --n-jobs 4 2>&1 | tee hp_tuning.log
+
+# (Wait 4-8 hours or run in screen/tmux for background)
+
+# Terminal 2: Check Progress
+$ tail -f hp_tuning.log
+$ watch -n 5 nvidia-smi  # Monitor GPU
+
+# After tuning completes, Terminal 1 or New Terminal:
+$ python train_with_tuning.py --all 2>&1 | tee train_tuned.log
+
+# (Wait 4-6 hours for training)
+
+# Generate Comparison Report:
+$ python compare_metrics.py
+
+# View Results:
+$ ls results/tuned_results/
+$ cat results/hp_tuning/reports/hp_tuning_report.txt
+$ cat results/comparison/summary_table.csv
+
+
+KEY FILES REFERENCE
+═════════════════════
+
+Script Files:
+  • hp_tuning.py           ← Optuna-based hyperparameter search
+  • train_with_tuning.py   ← Train with tuned hyperparameters
+  • train_pipeline.py      ← Original training (baseline/reference)
+  • compare_metrics.py     ← Generate comparison visualizations
+  • requirements.txt       ← Python dependencies (includes optuna)
+
+Configuration/Hyperparameters:
+  • hp_tuning.py → suggest_hyperparams(trial, model_type)
+    Edit to customize parameter ranges
+
+Data:
+  • 2d_datasets/<method>/processed_*.pt
+    Pre-processed image datasets
+
+Output:
+  • results/hp_tuning/
+    Best hyperparameters for each model/dataset
+  • results/tuned_results/
+    Models trained with tuned hyperparameters
+  • results/comparison/
+    Comparison visualizations
+
+
+═════════════════════════════════════════════════════════════════════════════════
+"""
+
+print(__doc__)

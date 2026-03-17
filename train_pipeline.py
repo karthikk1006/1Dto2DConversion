@@ -513,26 +513,37 @@ def train_uniform_model(
         elapsed  = time.time() - t0
  
         # ── Update the bar postfix (visible on console) ────────────────────
-        marker = "✓" if val_acc > best_val_acc else " "
+        # Early stopping check
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            patience_counter = 0
+            best_weights = model.state_dict().copy()
+            torch.save(model.state_dict(), best_path)
+            marker = "✓"
+            logger.debug(f"  ↑ new best checkpoint saved (val_acc={best_val_acc:.4f})")
+        else:
+            patience_counter += 1
+            marker = f" ({patience_counter})"
+            if patience_counter >= patience:
+                logger.info(f"Early stopping at epoch {epoch+1}/30 (patience={patience})")
+                if best_weights is not None:
+                    model.load_state_dict(best_weights)
+                epoch_bar.close()
+                break
+        
         epoch_bar.set_postfix(
             train_loss=f"{avg_train_loss:.3f}",
             val_loss=f"{val_loss:.3f}",
             val_acc=f"{val_acc:.4f}",
             best=f"{best_val_acc:.4f}{marker}",
         )
- 
+        
         # ── Full per-epoch detail → log file only (DEBUG) ─────────────────
         logger.debug(
             f"ep {epoch+1:02d}/30 | "
             f"train_loss={avg_train_loss:.4f} | val_loss={val_loss:.4f} | "
-            f"val_acc={val_acc:.4f} | time={elapsed:.1f}s"
+            f"val_acc={val_acc:.4f} | patience={patience_counter}/{patience} | time={elapsed:.1f}s"
         )
- 
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            torch.save(model.state_dict(), best_path)
-            logger.debug(f"  ↑ new best checkpoint saved (val_acc={best_val_acc:.4f})")
- 
     epoch_bar.close()
  
     # ── GPU cleanup ───────────────────────────────────────────────────────────

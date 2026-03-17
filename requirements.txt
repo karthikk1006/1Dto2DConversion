@@ -6,3 +6,5 @@ scikit-learn
 matplotlib
 tqdm
 pillow
+optuna
+sqlalchemy
