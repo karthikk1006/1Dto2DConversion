@@ -448,7 +448,7 @@ def tune_hyperparameters(
     """
     # Force n_jobs=1 for CUDA to avoid memory conflicts between parallel trials
     if DEVICE.type == "cuda" and n_jobs > 1:
-        logger_temp = _master_logger
+        logger_temp = _master_logger()
         logger_temp.warning(
             f"Forcing n_jobs=1 for CUDA device (was {n_jobs}). "
             "Parallel jobs on GPU can cause memory errors."
