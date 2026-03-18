@@ -47,6 +47,7 @@ import time
 import logging
 import argparse
 import datetime
+import warnings
 from typing import Dict, List, Tuple, Optional
 
 import numpy as np
@@ -80,6 +81,14 @@ from train_pipeline import (
     efficientnet_val_transform,
     nctd_transform,
     _master_logger,
+)
+
+# Suppress PyTorch lr_scheduler.step() warning about calling order
+# (The warning is a false positive in our case as we call it correctly)
+warnings.filterwarnings(
+    "ignore",
+    message=".*Detected call of `lr_scheduler.step()` before `optimizer.step()`.*",
+    category=UserWarning
 )
 
 
@@ -148,13 +157,13 @@ def suggest_hyperparams(trial: Trial, model_type: str) -> Dict:
     
     params = {
         "learning_rate": trial.suggest_float("learning_rate", 1e-5, 1e-2, log=True),
-        "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128, 256]),
+        "batch_size": trial.suggest_categorical("batch_size", [32, 64, 128]),
         "weight_decay": trial.suggest_float("weight_decay", 1e-5, 1e-2, log=True),
         "optimizer": trial.suggest_categorical("optimizer", ["adam", "sgd"]),
         "scheduler": trial.suggest_categorical(
             "scheduler", ["none", "step", "cosine", "exponential"]
         ),
-        "epochs": trial.suggest_int("epochs", 20, 60),
+        "epochs": trial.suggest_int("epochs", 20, 50),
     }
     
     # Optimizer-specific parameters
@@ -191,118 +200,134 @@ def train_with_hyperparams(
     Train model with given hyperparameters.
     Returns (best_val_acc, final_val_acc).
     """
-    model = model.to(DEVICE)
-    criterion = nn.CrossEntropyLoss().to(DEVICE)
-    
-    # Setup optimizer
-    if params["optimizer"] == "adam":
-        optimizer = optim.Adam(
-            model.parameters(),
-            lr=params["learning_rate"],
-            weight_decay=params["weight_decay"],
-        )
-    else:  # sgd
-        optimizer = optim.SGD(
-            model.parameters(),
-            lr=params["learning_rate"],
-            momentum=params.get("momentum", 0.9),
-            weight_decay=params["weight_decay"],
-        )
-    
-    # Setup scheduler
-    scheduler = None
-    if params["scheduler"] == "step":
-        scheduler = optim.lr_scheduler.StepLR(
-            optimizer,
-            step_size=params["scheduler_step_size"],
-            gamma=params["scheduler_gamma"],
-        )
-    elif params["scheduler"] == "cosine":
-        scheduler = optim.lr_scheduler.CosineAnnealingLR(
-            optimizer,
-            T_max=params["scheduler_t_max"],
-        )
-    elif params["scheduler"] == "exponential":
-        scheduler = optim.lr_scheduler.ExponentialLR(
-            optimizer,
-            gamma=params["scheduler_gamma"],
-        )
-    
-    scaler = torch.amp.GradScaler(enabled=_USE_AMP)
-    
-    best_val_acc = -1.0
-    epochs = params["epochs"]
-    patience = 10  # Early stopping patience
-    patience_counter = 0
-    best_weights = None
-    
-    for epoch in range(epochs):
-        # ── Train ─────────────────────────────────────────────────────────
-        model.train()
-        running_loss = 0.0
-        n_batches = 0
+    try:
+        # Check GPU memory before training
+        if DEVICE.type == "cuda":
+            torch.cuda.empty_cache()
+            torch.cuda.synchronize()
         
-        for Xb, yb in train_loader:
-            Xb = Xb.to(DEVICE, non_blocking=True)
-            yb = yb.to(DEVICE, non_blocking=True)
-            
-            optimizer.zero_grad(set_to_none=True)
-            with torch.amp.autocast(device_type=DEVICE.type, enabled=_USE_AMP):
-                loss = criterion(model(Xb), yb)
-            
-            scaler.scale(loss).backward()
-            scaler.step(optimizer)
-            scaler.update()
-            
-            running_loss += loss.item()
-            n_batches += 1
+        model = model.to(DEVICE)
+        criterion = nn.CrossEntropyLoss().to(DEVICE)
         
-        # ── Validate ──────────────────────────────────────────────────────
-        model.eval()
-        val_preds, val_trues = [], []
+        # Setup optimizer
+        if params["optimizer"] == "adam":
+            optimizer = optim.Adam(
+                model.parameters(),
+                lr=params["learning_rate"],
+                weight_decay=params["weight_decay"],
+            )
+        else:  # sgd
+            optimizer = optim.SGD(
+                model.parameters(),
+                lr=params["learning_rate"],
+                momentum=params.get("momentum", 0.9),
+                weight_decay=params["weight_decay"],
+            )
         
-        with torch.no_grad():
-            for Xb, yb in val_loader:
+        # Setup scheduler
+        scheduler = None
+        if params["scheduler"] == "step":
+            scheduler = optim.lr_scheduler.StepLR(
+                optimizer,
+                step_size=params["scheduler_step_size"],
+                gamma=params["scheduler_gamma"],
+            )
+        elif params["scheduler"] == "cosine":
+            scheduler = optim.lr_scheduler.CosineAnnealingLR(
+                optimizer,
+                T_max=params["scheduler_t_max"],
+            )
+        elif params["scheduler"] == "exponential":
+            scheduler = optim.lr_scheduler.ExponentialLR(
+                optimizer,
+                gamma=params["scheduler_gamma"],
+            )
+        
+        scaler = torch.amp.GradScaler(enabled=_USE_AMP)
+        
+        best_val_acc = -1.0
+        epochs = params["epochs"]
+        patience = 10  # Early stopping patience
+        patience_counter = 0
+        best_weights = None
+        
+        for epoch in range(epochs):
+            # ── Train ─────────────────────────────────────────────────────────
+            model.train()
+            running_loss = 0.0
+            n_batches = 0
+            
+            for Xb, yb in train_loader:
                 Xb = Xb.to(DEVICE, non_blocking=True)
-                yb_d = yb.to(DEVICE, non_blocking=True)
+                yb = yb.to(DEVICE, non_blocking=True)
                 
+                optimizer.zero_grad(set_to_none=True)
                 with torch.amp.autocast(device_type=DEVICE.type, enabled=_USE_AMP):
-                    out = model(Xb)
+                    loss = criterion(model(Xb), yb)
                 
-                val_preds.extend(out.argmax(1).cpu().numpy())
-                val_trues.extend(yb.numpy())
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+                
+                running_loss += loss.item()
+                n_batches += 1
+            
+            # ── Validate ──────────────────────────────────────────────────────
+            model.eval()
+            val_preds, val_trues = [], []
+            
+            with torch.no_grad():
+                for Xb, yb in val_loader:
+                    Xb = Xb.to(DEVICE, non_blocking=True)
+                    yb_d = yb.to(DEVICE, non_blocking=True)
+                    
+                    with torch.amp.autocast(device_type=DEVICE.type, enabled=_USE_AMP):
+                        out = model(Xb)
+                    
+                    val_preds.extend(out.argmax(1).cpu().numpy())
+                    val_trues.extend(yb.numpy())
+            
+            val_acc = accuracy_score(val_trues, val_preds)
+            
+            # Early stopping check
+            if val_acc > best_val_acc:
+                best_val_acc = val_acc
+                patience_counter = 0
+                best_weights = model.state_dict().copy()
+            else:
+                patience_counter += 1
+                if patience_counter >= patience:
+                    logger.info(f"Early stopping at epoch {epoch+1}/{epochs} (patience={patience})")
+                    if best_weights is not None:
+                        model.load_state_dict(best_weights)
+                    break
+            
+            # Update scheduler
+            if scheduler is not None:
+                scheduler.step()
+            
+            logger.debug(
+                f"ep {epoch+1:02d}/{epochs} | "
+                f"train_loss={running_loss/n_batches:.4f} | "
+                f"val_acc={val_acc:.4f} | best={best_val_acc:.4f} | patience={patience_counter}/{patience}"
+            )
         
-        val_acc = accuracy_score(val_trues, val_preds)
+        # GPU cleanup
+        if DEVICE.type == "cuda":
+            torch.cuda.synchronize()
+            torch.cuda.empty_cache()
         
-        # Early stopping check
-        if val_acc > best_val_acc:
-            best_val_acc = val_acc
-            patience_counter = 0
-            best_weights = model.state_dict().copy()
-        else:
-            patience_counter += 1
-            if patience_counter >= patience:
-                logger.info(f"Early stopping at epoch {epoch+1}/{epochs} (patience={patience})")
-                if best_weights is not None:
-                    model.load_state_dict(best_weights)
-                break
-        
-        # Update scheduler
-        if scheduler is not None:
-            scheduler.step()
-        
-        logger.debug(
-            f"ep {epoch+1:02d}/{epochs} | "
-            f"train_loss={running_loss/n_batches:.4f} | "
-            f"val_acc={val_acc:.4f} | best={best_val_acc:.4f} | patience={patience_counter}/{patience}"
-        )
+        return best_val_acc, val_acc
     
-    # GPU cleanup
-    if DEVICE.type == "cuda":
-        torch.cuda.synchronize()
-        torch.cuda.empty_cache()
-    
-    return best_val_acc, val_acc
+    except RuntimeError as e:
+        # Handle CUDA out of memory or other runtime errors
+        if "CUDA" in str(e) or "out of memory" in str(e).lower():
+            logger.warning(f"CUDA error encountered: {str(e)}")
+            # Force cleanup
+            if DEVICE.type == "cuda":
+                torch.cuda.empty_cache()
+                torch.cuda.synchronize()
+        raise
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -319,18 +344,22 @@ def create_objective(
     
     def objective(trial: Trial) -> float:
         try:
+            # Ensure data is on CPU to avoid GPU memory accumulation
+            X_cpu = X.cpu() if X.is_cuda else X
+            y_cpu = y.cpu() if y.is_cuda else y
+            
             # Suggest hyperparameters
             params = suggest_hyperparams(trial, model_type)
             
             # Stratified splits: 70% train / 10% val / 20% test
-            num_samples = len(y)
+            num_samples = len(y_cpu)
             train_idx, test_idx = train_test_split(
                 range(num_samples), test_size=0.2,
-                stratify=y.cpu().numpy(), random_state=42,
+                stratify=y_cpu.cpu().numpy(), random_state=42,
             )
             train_idx, val_idx = train_test_split(
                 train_idx, test_size=0.125,
-                stratify=y[train_idx].cpu().numpy(), random_state=42,
+                stratify=y_cpu[train_idx].cpu().numpy(), random_state=42,
             )
             
             # Data transforms
@@ -347,9 +376,9 @@ def create_objective(
             
             # Create datasets and dataloaders
             train_ds = Tabular2ImageDataset(
-                X[train_idx], y[train_idx], model_type, train_tf
+                X_cpu[train_idx], y_cpu[train_idx], model_type, train_tf
             )
-            val_ds = Tabular2ImageDataset(X[val_idx], y[val_idx], model_type, val_tf)
+            val_ds = Tabular2ImageDataset(X_cpu[val_idx], y_cpu[val_idx], model_type, val_tf)
             
             _pin = DEVICE.type == "cuda"
             train_loader = DataLoader(
@@ -382,8 +411,23 @@ def create_objective(
             
             return best_val_acc
         
+        except optuna.TrialPruned():
+            # Re-raise pruned trials
+            raise
         except Exception as e:
-            logger.error(f"Trial {trial.number} failed: {str(e)}")
+            # Log error and cleanup memory
+            error_msg = str(e)
+            logger.error(f"Trial {trial.number} failed: {error_msg}")
+            
+            # Force aggressive memory cleanup on errors
+            try:
+                if DEVICE.type == "cuda":
+                    torch.cuda.empty_cache()
+                    torch.cuda.synchronize()
+            except Exception:
+                pass
+            
+            # Return 0.0 for failed trials
             return 0.0
     
     return objective
@@ -402,6 +446,15 @@ def tune_hyperparameters(
     """
     Tune hyperparameters for a specific (model_type, dataset) pair using Optuna.
     """
+    # Force n_jobs=1 for CUDA to avoid memory conflicts between parallel trials
+    if DEVICE.type == "cuda" and n_jobs > 1:
+        logger_temp = _master_logger
+        logger_temp.warning(
+            f"Forcing n_jobs=1 for CUDA device (was {n_jobs}). "
+            "Parallel jobs on GPU can cause memory errors."
+        )
+        n_jobs = 1
+    
     ds_stem = os.path.splitext(dataset_filename)[0]
     logger = _make_tuning_logger(model_type, ds_stem)
     

@@ -1,0 +1,4 @@
+/2d_datasets
+/__pycache__
+*.pyc
+/results

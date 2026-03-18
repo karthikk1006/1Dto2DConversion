@@ -81,13 +81,15 @@ Choose an option:
 
 [4] BOTH MODELS - QUICK TUNE
     • 50 trials per model on all datasets
+    • Auto-optimized for your GPU (n_jobs auto-adjusted)
     • Best for: Fast comparison
-    • Est. time: 2-3 hours (with --n-jobs 2-4)
+    • Est. time: 2-3 hours (sequential on GPU)
 
 [5] BOTH MODELS - FULL TUNE (RECOMMENDED)
     • 100 trials per model on all datasets
+    • Auto-optimized for your GPU (n_jobs auto-adjusted)
     • Best for: Best possible results
-    • Est. time: 4-8 hours (with --n-jobs 4)
+    • Est. time: 4-8 hours (sequential on GPU)
 
 [6] TRAIN WITH TUNED HYPERPARAMETERS
     • Train all models using tuned hyperparameters
@@ -148,37 +150,33 @@ Press Enter to continue...
         
         elif choice == "2":
             # Single model quick tune
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 1): ").strip() or "1"
             run_command(
                 ["python", "hp_tuning.py", "--model", "efficientnet", 
-                 "--n-trials", "50", "--n-jobs", n_jobs],
+                 "--n-trials", "50"],
                 "SINGLE MODEL - QUICK TUNE: EfficientNet - 50 trials"
             )
         
         elif choice == "3":
             # Single model full tune
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 1): ").strip() or "1"
             run_command(
                 ["python", "hp_tuning.py", "--model", "efficientnet",
-                 "--n-trials", "100", "--n-jobs", n_jobs],
+                 "--n-trials", "100"],
                 "SINGLE MODEL - FULL TUNE: EfficientNet - 100 trials"
             )
         
         elif choice == "4":
             # Both models quick tune
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 2): ").strip() or "2"
             run_command(
                 ["python", "hp_tuning.py", "--all",
-                 "--n-trials", "50", "--n-jobs", n_jobs],
+                 "--n-trials", "50"],
                 "BOTH MODELS - QUICK TUNE: 50 trials each"
             )
         
         elif choice == "5":
             # Both models full tune (recommended)
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 4): ").strip() or "4"
             run_command(
                 ["python", "hp_tuning.py", "--all",
-                 "--n-trials", "100", "--n-jobs", n_jobs],
+                 "--n-trials", "100"],
                 "BOTH MODELS - FULL TUNE: 100 trials each (RECOMMENDED)"
             )
         

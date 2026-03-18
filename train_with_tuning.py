@@ -43,6 +43,7 @@ import time
 import logging
 import argparse
 import datetime
+import warnings
 from typing import Dict, Optional
 
 import numpy as np
@@ -72,6 +73,14 @@ from train_pipeline import (
     _master_logger,
     _combo_logger,
     _get_dirs,
+)
+
+# Suppress PyTorch lr_scheduler.step() warning about calling order
+# (The warning is a false positive in our case as we call it correctly)
+warnings.filterwarnings(
+    "ignore",
+    message=".*Detected call of `lr_scheduler.step()` before `optimizer.step()`.*",
+    category=UserWarning
 )
 
 
