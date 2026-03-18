@@ -87,7 +87,7 @@ warnings.filterwarnings(
 # ═══════════════════════════════════════════════════════════════════════════════
 # HYPERPARAMETER LOADING
 # ═══════════════════════════════════════════════════════════════════════════════
-def load_tuned_hyperparams(model_type: str, dataset_filename: str) -> Optional[Dict]:
+def load_tuned_hyperparams(model_type: str, method_name: str, dataset_filename: str) -> Optional[Dict]:
     """
     Load the best hyperparameters found by hp_tuning.py for a given dataset.
     
@@ -97,7 +97,7 @@ def load_tuned_hyperparams(model_type: str, dataset_filename: str) -> Optional[D
     """
     ds_stem = os.path.splitext(dataset_filename)[0]
     params_path = os.path.join(
-        RESULTS_DIR, "hp_tuning", model_type, f"best_params_{ds_stem}.json"
+        RESULTS_DIR, "hp_tuning", model_type, method_name, f"best_params_{ds_stem}.json"
     )
     
     if not os.path.exists(params_path):
@@ -368,7 +368,7 @@ def train_for_method_and_model_with_tuning(
         )
         
         # Load tuned hyperparameters
-        hyperparams = load_tuned_hyperparams(model_type, dataset_filename)
+        hyperparams = load_tuned_hyperparams(model_type, method_name, dataset_filename)
         
         if hyperparams is not None:
             using_tuned = True

@@ -165,20 +165,52 @@ Press Enter to continue...
             )
         
         elif choice == "4":
-            # Both models quick tune
+            # Both models quick tune for both methods
+            n_jobs = input("\nNumber of parallel jobs (1-4, default 2): ").strip() or "2"
             run_command(
-                ["python", "hp_tuning.py", "--all",
-                 "--n-trials", "50"],
-                "BOTH MODELS - QUICK TUNE: 50 trials each"
+                ["python", "hp_tuning.py", "--all", "--method", "ours",
+                 "--n-trials", "50", "--n-jobs", n_jobs],
+                "BOTH MODELS - QUICK TUNE (Method: ours): 50 trials each"
+            )
+            run_command(
+                ["python", "hp_tuning.py", "--all", "--method", "NCTD",
+                 "--n-trials", "50", "--n-jobs", n_jobs],
+                "BOTH MODELS - QUICK TUNE (Method: NCTD): 50 trials each"
             )
         
         elif choice == "5":
-            # Both models full tune (recommended)
-            run_command(
-                ["python", "hp_tuning.py", "--all",
-                 "--n-trials", "100"],
-                "BOTH MODELS - FULL TUNE: 100 trials each (RECOMMENDED)"
-            )
+            # Both models full tune + training (recommended)
+            print_section("BOTH MODELS - FULL TUNE (RECOMMENDED)")
+            print("\nThis will tune all 4 combinations (2 models x 2 methods) and then train with best params.")
+            n_jobs = input("\nNumber of parallel jobs (1-4, default 4): ").strip() or "4"
+            
+            print("\n[STEP 1] Tuning Method: ours...")
+            if not run_command(
+                ["python", "hp_tuning.py", "--all", "--method", "ours",
+                 "--n-trials", "100", "--n-jobs", n_jobs],
+                "STEP 1/3: HP TUNING - Method: ours"
+            ):
+                print("HP Tuning ours failed. Aborting workflow.")
+                continue
+
+            print("\n[STEP 2] Tuning Method: NCTD...")
+            if not run_command(
+                ["python", "hp_tuning.py", "--all", "--method", "NCTD",
+                 "--n-trials", "100", "--n-jobs", n_jobs],
+                "STEP 2/3: HP TUNING - Method: NCTD"
+            ):
+                print("HP Tuning NCTD failed. Aborting workflow.")
+                continue
+
+            print("\n[STEP 3] Starting Training and Evaluation with Tuned Hyperparameters...")
+            if not run_command(
+                ["python", "train_with_tuning.py", "--all"],
+                "STEP 3/3: TRAINING WITH TUNING (All Combinations)"
+            ):
+                print("Training failed.")
+                continue
+                
+            print("\nResults saved properly. Test results are stored in results/tuned_results/...")
         
         elif choice == "6":
             # Train with tuned hyperparams
@@ -192,35 +224,45 @@ Press Enter to continue...
             print_section("ALL-IN-ONE WORKFLOW")
             print("""
 This will run the complete workflow:
-  1. HP Tuning (100 trials per model)
-  2. Training with tuned hyperparameters
-  3. Comparison
+  1. HP Tuning for Method 'ours' (100 trials per model)
+  2. HP Tuning for Method 'NCTD' (100 trials per model)
+  3. Training with tuned hyperparameters (All Combinations)
+  4. Comparison
 
 Total estimated time: 8-14 hours
 """)
             n_jobs_tune = input("\nNumber of parallel jobs for tuning (1-4, default 4): ").strip() or "4"
             
-            print("\n[STEP 1] Starting HP Tuning...")
+            print("\n[STEP 1] Starting HP Tuning (Method: ours)...")
             if not run_command(
-                ["python", "hp_tuning.py", "--all",
+                ["python", "hp_tuning.py", "--all", "--method", "ours",
                  "--n-trials", "100", "--n-jobs", n_jobs_tune],
-                "STEP 1/3: HP TUNING"
+                "STEP 1/4: HP TUNING (Method: ours)"
+            ):
+                print("HP Tuning failed. Aborting workflow.")
+                continue
+
+            print("\n[STEP 2] Starting HP Tuning (Method: NCTD)...")
+            if not run_command(
+                ["python", "hp_tuning.py", "--all", "--method", "NCTD",
+                 "--n-trials", "100", "--n-jobs", n_jobs_tune],
+                "STEP 2/4: HP TUNING (Method: NCTD)"
             ):
                 print("HP Tuning failed. Aborting workflow.")
                 continue
             
-            print("\n[STEP 2] Starting Training with Tuned Hyperparameters...")
+            print("\n[STEP 3] Starting Training with Tuned Hyperparameters...")
             if not run_command(
                 ["python", "train_with_tuning.py", "--all"],
-                "STEP 2/3: TRAINING WITH TUNING"
+                "STEP 3/4: TRAINING WITH TUNING"
             ):
                 print("Training failed. Aborting workflow.")
                 continue
             
-            print("\n[STEP 3] Generating Comparison Report...")
+            print("\n[STEP 4] Generating Comparison Report...")
             if not run_command(
                 ["python", "compare_metrics.py"],
-                "STEP 3/3: COMPARISON & VISUALIZATION"
+                "STEP 4/4: COMPARISON & VISUALIZATION"
             ):
                 print("Comparison failed (non-critical).")
             

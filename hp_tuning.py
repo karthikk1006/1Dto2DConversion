@@ -100,15 +100,15 @@ _DATE_FMT = "%Y-%m-%d %H:%M:%S"
 _RUN_TS = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
-def _make_tuning_logger(model_type: str, dataset_stem: str) -> logging.Logger:
+def _make_tuning_logger(model_type: str, dataset_stem: str, method_name: str) -> logging.Logger:
     """Create logger for hyperparameter tuning."""
     log_file = os.path.join(
-        RESULTS_DIR, "hp_tuning", model_type, "logs",
+        RESULTS_DIR, "hp_tuning", model_type, method_name, "logs",
         f"tuning_{dataset_stem}_{_RUN_TS}.log"
     )
     os.makedirs(os.path.dirname(log_file), exist_ok=True)
     
-    logger = logging.getLogger(f"hp_tuning.{model_type}.{dataset_stem}")
+    logger = logging.getLogger(f"hp_tuning.{model_type}.{method_name}.{dataset_stem}")
     if logger.handlers:
         return logger
     
@@ -456,7 +456,7 @@ def tune_hyperparameters(
         n_jobs = 1
     
     ds_stem = os.path.splitext(dataset_filename)[0]
-    logger = _make_tuning_logger(model_type, ds_stem)
+    logger = _make_tuning_logger(model_type, ds_stem, method_name)
     
     logger.info(f"{'='*70}")
     logger.info(f"  HP Tuning: {model_type.upper()} on {ds_stem}")
@@ -502,7 +502,7 @@ def tune_hyperparameters(
         logger.info(f"{'─'*70}")
         
         # Save results
-        output_dir = os.path.join(RESULTS_DIR, "hp_tuning", model_type)
+        output_dir = os.path.join(RESULTS_DIR, "hp_tuning", model_type, method_name)
         os.makedirs(output_dir, exist_ok=True)
         
         # Save best parameters as JSON
