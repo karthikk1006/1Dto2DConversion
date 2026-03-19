@@ -91,6 +91,10 @@ warnings.filterwarnings(
     category=UserWarning
 )
 
+# Enable CuDNN benchmark for faster training on fixed-size inputs
+if torch.cuda.is_available():
+    torch.backends.cudnn.benchmark = True
+
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # LOGGING SETUP
@@ -314,6 +318,9 @@ def train_with_hyperparams(
         
         # GPU cleanup
         if DEVICE.type == "cuda":
+            del optimizer, scaler
+            if scheduler is not None:
+                del scheduler
             torch.cuda.synchronize()
             torch.cuda.empty_cache()
         
@@ -396,6 +403,11 @@ def create_objective(
                 model, train_loader, val_loader, params, logger
             )
             
+            # Explicit memory cleanup per trial
+            del model
+            if DEVICE.type == "cuda":
+                torch.cuda.empty_cache()
+            
             # Report intermediate values for pruning
             trial.report(best_val_acc, step=0)
             
@@ -411,7 +423,7 @@ def create_objective(
             
             return best_val_acc
         
-        except optuna.TrialPruned():
+        except optuna.exceptions.TrialPruned:
             # Re-raise pruned trials
             raise
         except Exception as e:
@@ -442,16 +454,18 @@ def tune_hyperparameters(
     method_name: str = "ours",
     n_trials: int = 100,
     n_jobs: int = 1,
+    allow_gpu_parallel: bool = False,
 ):
     """
     Tune hyperparameters for a specific (model_type, dataset) pair using Optuna.
     """
     # Force n_jobs=1 for CUDA to avoid memory conflicts between parallel trials
-    if DEVICE.type == "cuda" and n_jobs > 1:
+    if DEVICE.type == "cuda" and n_jobs > 1 and not allow_gpu_parallel:
         logger_temp = _master_logger()
         logger_temp.warning(
             f"Forcing n_jobs=1 for CUDA device (was {n_jobs}). "
-            "Parallel jobs on GPU can cause memory errors."
+            "Parallel jobs on GPU can cause memory errors. "
+            "Use --allow-gpu-parallel to override."
         )
         n_jobs = 1
     
@@ -546,6 +560,7 @@ def tune_all_combinations(
     n_trials: int = 100,
     n_jobs: int = 1,
     method_name: str = "ours",
+    allow_gpu_parallel: bool = False,
 ):
     """
     Tune hyperparameters for all (model, dataset) combinations.
@@ -562,7 +577,7 @@ def tune_all_combinations(
             
             start_time = time.time()
             best_params, best_value = tune_hyperparameters(
-                model_type, dataset_filename, method_name, n_trials, n_jobs
+                model_type, dataset_filename, method_name, n_trials, n_jobs, allow_gpu_parallel
             )
             elapsed = time.time() - start_time
             
@@ -682,6 +697,11 @@ if __name__ == "__main__":
         default=1,
         help="Number of parallel jobs for Optuna (default: 1)",
     )
+    parser.add_argument(
+        "--allow-gpu-parallel",
+        action="store_true",
+        help="Allow parallel jobs on GPU (WARNING: may cause OOM errors)",
+    )
     
     args = parser.parse_args()
     
@@ -711,6 +731,7 @@ if __name__ == "__main__":
         n_trials=args.n_trials,
         n_jobs=args.n_jobs,
         method_name=args.method,
+        allow_gpu_parallel=args.allow_gpu_parallel,
     )
     elapsed = time.time() - start_time
     
