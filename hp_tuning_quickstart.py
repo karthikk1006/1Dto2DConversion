@@ -58,6 +58,17 @@ def run_command(cmd, description):
         return False
 
 
+def get_parallel_flags(default_jobs="2"):
+    """Helper to get n_jobs and GPU parallel flags."""
+    n_jobs = input(f"\nNumber of parallel jobs (1-4, default {default_jobs}): ").strip() or default_jobs
+    flags = ["--n-jobs", n_jobs]
+    if int(n_jobs) > 1:
+        allow_gpu = input("Allow parallel GPU jobs? (WARNING: may cause OOM) (y/N): ").strip().lower()
+        if allow_gpu == 'y':
+            flags.append("--allow-gpu-parallel")
+    return flags
+
+
 def show_menu():
     """Show main menu and return user choice."""
     print_header("HP TUNING QUICKSTART MENU")
@@ -166,15 +177,15 @@ Press Enter to continue...
         
         elif choice == "4":
             # Both models quick tune for both methods
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 2): ").strip() or "2"
+            parallel_flags = get_parallel_flags("2")
             run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "ours",
-                 "--n-trials", "50", "--n-jobs", n_jobs],
+                 "--n-trials", "50"] + parallel_flags,
                 "BOTH MODELS - QUICK TUNE (Method: ours): 50 trials each"
             )
             run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "NCTD",
-                 "--n-trials", "50", "--n-jobs", n_jobs],
+                 "--n-trials", "50"] + parallel_flags,
                 "BOTH MODELS - QUICK TUNE (Method: NCTD): 50 trials each"
             )
         
@@ -182,12 +193,12 @@ Press Enter to continue...
             # Both models full tune + training (recommended)
             print_section("BOTH MODELS - FULL TUNE (RECOMMENDED)")
             print("\nThis will tune all 4 combinations (2 models x 2 methods) and then train with best params.")
-            n_jobs = input("\nNumber of parallel jobs (1-4, default 4): ").strip() or "4"
+            parallel_flags = get_parallel_flags("4")
             
             print("\n[STEP 1] Tuning Method: ours...")
             if not run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "ours",
-                 "--n-trials", "100", "--n-jobs", n_jobs],
+                 "--n-trials", "100"] + parallel_flags,
                 "STEP 1/3: HP TUNING - Method: ours"
             ):
                 print("HP Tuning ours failed. Aborting workflow.")
@@ -196,7 +207,7 @@ Press Enter to continue...
             print("\n[STEP 2] Tuning Method: NCTD...")
             if not run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "NCTD",
-                 "--n-trials", "100", "--n-jobs", n_jobs],
+                 "--n-trials", "100"] + parallel_flags,
                 "STEP 2/3: HP TUNING - Method: NCTD"
             ):
                 print("HP Tuning NCTD failed. Aborting workflow.")
@@ -231,12 +242,12 @@ This will run the complete workflow:
 
 Total estimated time: 8-14 hours
 """)
-            n_jobs_tune = input("\nNumber of parallel jobs for tuning (1-4, default 4): ").strip() or "4"
+            parallel_flags = get_parallel_flags("4")
             
             print("\n[STEP 1] Starting HP Tuning (Method: ours)...")
             if not run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "ours",
-                 "--n-trials", "100", "--n-jobs", n_jobs_tune],
+                 "--n-trials", "100"] + parallel_flags,
                 "STEP 1/4: HP TUNING (Method: ours)"
             ):
                 print("HP Tuning failed. Aborting workflow.")
@@ -245,7 +256,7 @@ Total estimated time: 8-14 hours
             print("\n[STEP 2] Starting HP Tuning (Method: NCTD)...")
             if not run_command(
                 ["python", "hp_tuning.py", "--all", "--method", "NCTD",
-                 "--n-trials", "100", "--n-jobs", n_jobs_tune],
+                 "--n-trials", "100"] + parallel_flags,
                 "STEP 2/4: HP TUNING (Method: NCTD)"
             ):
                 print("HP Tuning failed. Aborting workflow.")
