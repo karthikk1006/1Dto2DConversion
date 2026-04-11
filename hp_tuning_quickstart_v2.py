@@ -132,10 +132,15 @@ Choose an option:
     • Train CNN with tuned hyperparameters
     • Best for: Running the complete CNN pipeline
 
+[11] FULL TUNE BOTH MODELS (BOTH METHODS, ALL DATASETS) + TRAIN
+    • Tune both CNN and EfficientNet for both methods across datasets
+    • Train all models with tuned hyperparameters
+    • Best for: Comprehensive pipeline run (auto-discovers datasets)
+
 [0] EXIT
 
 """)
-    choice = input("Enter choice [0-10]: ").strip()
+    choice = input("Enter choice [0-11]: ").strip()
     return choice
 
 
@@ -266,6 +271,37 @@ Press Enter to continue...
             run_command(
                 ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
                 "TRAINING: Use tuned hyperparameters for CNN, both methods, all datasets, output to results_nctd_dataset",
+                auto_confirm=auto_yes
+            )
+        elif choice == "11":
+            # Full tune BOTH models for both methods and all datasets, then train with tuned params, output to results_nctd_dataset
+            print_section("FULL TUNE BOTH MODELS (BOTH METHODS, ALL DATASETS) + TRAIN [NEW]")
+            parallel_flags = get_parallel_flags("4")
+            auto_yes = input("\nAuto-confirm all (y/n)? ").strip().lower() == 'y'
+            methods = ["ours", "NCTD"]
+            models = ["nctd_cnn", "efficientnet"]
+            
+            ours_dir = os.path.join("2d_nctd_datasets", "ours")
+            if not os.path.exists(ours_dir):
+                print(f"Error: {ours_dir} not found!")
+                continue
+                
+            datasets = [d for d in os.listdir(ours_dir) if os.path.isdir(os.path.join(ours_dir, d))]
+            
+            for model in models:
+                for method in methods:
+                    for dataset in datasets:
+                        print(f"\nTuning: Model={model}, Method={method}, Dataset={dataset}")
+                        run_command(
+                            ["python", "hp_tuning.py", "--model", model, "--method", method, "--dataset", dataset, "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
+                            f"HP TUNING: {model.upper()}, Method={method}, Dataset={dataset}, 100 trials, output to results_nctd_dataset",
+                            auto_confirm=auto_yes
+                        )
+            
+            print("\nStarting training with tuned parameters for all combinations...")
+            run_command(
+                ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
+                "TRAINING: Use tuned hyperparameters for BOTH MODELS, both methods, all datasets, output to results_nctd_dataset",
                 auto_confirm=auto_yes
             )
         elif choice == "7":
