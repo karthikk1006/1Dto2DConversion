@@ -719,6 +719,12 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
+    if args.output_dir:
+        import train_pipeline
+        train_pipeline.RESULTS_DIR = args.output_dir
+        global RESULTS_DIR
+        RESULTS_DIR = args.output_dir
+    
     master = _master_logger()
     master.info(f"HP Tuning started | {_RUN_TS}")
     

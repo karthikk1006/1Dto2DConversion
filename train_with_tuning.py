@@ -532,6 +532,10 @@ if __name__ == "__main__":
     # Overwrite DATA_DIR safely for module functions from train_pipeline
     import train_pipeline
     train_pipeline.DATA_DIR = args.dataset_root
+    if args.output_dir:
+        train_pipeline.RESULTS_DIR = args.output_dir
+        global RESULTS_DIR
+        RESULTS_DIR = args.output_dir
     
     COMBOS = [
         ("NCTD", "nctd_cnn"),

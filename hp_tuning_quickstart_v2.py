@@ -31,14 +31,15 @@ def print_section(text):
     print(f"{'─' * 80}")
 
 
-def run_command(cmd, description):
+def run_command(cmd, description, auto_confirm=False):
     print_section(description)
     print(f"\nCommand: {' '.join(cmd)}\n")
     
-    confirm = input("Run command? (y/n): ").strip().lower()
-    if confirm != 'y':
-        print("Skipped.")
-        return False
+    if not auto_confirm:
+        confirm = input("Run command? (y/n): ").strip().lower()
+        if confirm != 'y':
+            print("Skipped.")
+            return False
     
     print("\n" + "=" * 80)
     start_time = time.time()
@@ -249,6 +250,7 @@ Press Enter to continue...
             # Full tune CNN for both methods and all 10 datasets, then train with tuned params, output to results_nctd_dataset
             print_section("FULL TUNE CNN (BOTH METHODS, ALL DATASETS) + TRAIN [NEW]")
             parallel_flags = get_parallel_flags("4")
+            auto_yes = input("\nAuto-confirm all (y/n)? ").strip().lower() == 'y'
             methods = ["ours", "NCTD"]
             # You may want to specify your 10 datasets explicitly if needed
             datasets = [d for d in os.listdir(os.path.join("2d_nctd_datasets", "ours")) if os.path.isdir(os.path.join("2d_nctd_datasets", "ours", d))][:10]
@@ -257,12 +259,14 @@ Press Enter to continue...
                     print(f"\nTuning: Method={method}, Dataset={dataset}, Model=nctd_cnn")
                     run_command(
                         ["python", "hp_tuning.py", "--model", "nctd_cnn", "--method", method, "--dataset", dataset, "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
-                        f"HP TUNING: CNN, Method={method}, Dataset={dataset}, 100 trials, output to results_nctd_dataset"
+                        f"HP TUNING: CNN, Method={method}, Dataset={dataset}, 100 trials, output to results_nctd_dataset",
+                        auto_confirm=auto_yes
                     )
             print("\nStarting training with tuned parameters for all combinations...")
             run_command(
                 ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
-                "TRAINING: Use tuned hyperparameters for CNN, both methods, all datasets, output to results_nctd_dataset"
+                "TRAINING: Use tuned hyperparameters for CNN, both methods, all datasets, output to results_nctd_dataset",
+                auto_confirm=auto_yes
             )
         elif choice == "7":
             print_section("ALL-IN-ONE WORKFLOW")
