@@ -348,6 +348,15 @@ class Tabular2ImageDataset(Dataset):
         self.model_type   = model_type
         self.transform    = transform
         self.indices      = indices
+        
+        # Remap labels to be 0-indexed and contiguous to prevent CUDA device-side asserts (CrossEntropy out of bounds)
+        unique_labels = torch.unique(self.y)
+        if unique_labels.max() >= len(unique_labels) or unique_labels.min() < 0:
+            mapping = {val.item(): i for i, val in enumerate(unique_labels.sort().values)}
+            mapped_y = self.y.clone()
+            for old_val, new_val in mapping.items():
+                mapped_y[self.y == old_val] = new_val
+            self.y = mapped_y
  
     def __len__(self):
         return len(self.indices) if self.indices is not None else len(self.y)
