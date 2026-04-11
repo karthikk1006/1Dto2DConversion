@@ -352,8 +352,8 @@ def create_objective(
     def objective(trial: Trial) -> float:
         try:
             # Ensure data is on CPU to avoid GPU memory accumulation
-            X_cpu = X.cpu() if X.is_cuda else X
-            y_cpu = y.cpu() if y.is_cuda else y
+            X_cpu = X.cpu() if getattr(X, 'is_cuda', False) else X
+            y_cpu = y.cpu() if getattr(y, 'is_cuda', False) else y
             
             # Suggest hyperparameters
             params = suggest_hyperparams(trial, model_type)
