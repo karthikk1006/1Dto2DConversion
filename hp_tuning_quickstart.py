@@ -153,9 +153,10 @@ Press Enter to continue...
         choice = show_menu()
         
         if choice == "1":
-            # Quick test
+            # Quick test (Added a default dataset to run on)
             run_command(
-                ["python", "hp_tuning.py", "--model", "efficientnet", "--n-trials", "10"],
+                ["python", "hp_tuning.py", "--model", "efficientnet", "--n-trials", "10", 
+                 "--dataset", "13_rotated_rastrigin_50d.npz"],
                 "QUICK TEST: EfficientNet - 10 trials on 1 dataset"
             )
         

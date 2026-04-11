@@ -383,9 +383,9 @@ def create_objective(
             
             # Create datasets and dataloaders
             train_ds = Tabular2ImageDataset(
-                X_cpu[train_idx], y_cpu[train_idx], model_type, train_tf
+                X_cpu, y_cpu, model_type, train_tf, indices=train_idx
             )
-            val_ds = Tabular2ImageDataset(X_cpu[val_idx], y_cpu[val_idx], model_type, val_tf)
+            val_ds = Tabular2ImageDataset(X_cpu, y_cpu, model_type, val_tf, indices=val_idx)
             
             _pin = DEVICE.type == "cuda"
             train_loader = DataLoader(
@@ -455,6 +455,9 @@ def tune_hyperparameters(
     n_trials: int = 100,
     n_jobs: int = 1,
     allow_gpu_parallel: bool = False,
+    dataset_root: str = DATA_DIR,
+    lazy_loading: bool = False,
+    full_loading: bool = False,
 ):
     """
     Tune hyperparameters for a specific (model_type, dataset) pair using Optuna.
@@ -479,7 +482,10 @@ def tune_hyperparameters(
     
     try:
         # Load dataset
-        X, y = load_2d_datasets(dataset_filename, method_name, DATA_DIR, logger)
+        X, y = load_2d_datasets(
+            dataset_filename, method_name, dataset_root, logger,
+            lazy_loading=lazy_loading, full_loading=full_loading
+        )
         num_classes = int(y.unique().numel())
         
         logger.info(f"Dataset: {num_classes} classes, {len(y)} samples")
@@ -561,6 +567,9 @@ def tune_all_combinations(
     n_jobs: int = 1,
     method_name: str = "ours",
     allow_gpu_parallel: bool = False,
+    dataset_root: str = DATA_DIR,
+    lazy_loading: bool = False,
+    full_loading: bool = False,
 ):
     """
     Tune hyperparameters for all (model, dataset) combinations.
@@ -577,7 +586,8 @@ def tune_all_combinations(
             
             start_time = time.time()
             best_params, best_value = tune_hyperparameters(
-                model_type, dataset_filename, method_name, n_trials, n_jobs, allow_gpu_parallel
+                model_type, dataset_filename, method_name, n_trials, n_jobs, allow_gpu_parallel,
+                dataset_root, lazy_loading, full_loading
             )
             elapsed = time.time() - start_time
             
@@ -702,6 +712,10 @@ if __name__ == "__main__":
         action="store_true",
         help="Allow parallel jobs on GPU (WARNING: may cause OOM errors)",
     )
+    parser.add_argument("--dataset-root", type=str, default=DATA_DIR, help="Set primary datasets folder name")
+    parser.add_argument("--lazy-loading", action="store_true", help="Use lazy chunked generation logic")
+    parser.add_argument("--full-loading", action="store_true", help="Use full chunked in-memory logic")
+    parser.add_argument("--output-dir", type=str, help="Output directory")
     
     args = parser.parse_args()
     
@@ -732,6 +746,9 @@ if __name__ == "__main__":
         n_jobs=args.n_jobs,
         method_name=args.method,
         allow_gpu_parallel=args.allow_gpu_parallel,
+        dataset_root=args.dataset_root,
+        lazy_loading=args.lazy_loading,
+        full_loading=args.full_loading,
     )
     elapsed = time.time() - start_time
     

@@ -158,30 +158,46 @@ Press Enter to continue...
         
         if choice == "1":
             run_command(
-                ["python", "hp_tuning.py", "--model", "efficientnet", "--n-trials", "10"] + dataset_flag + [loading_flag],
+                ["python", "hp_tuning.py", "--model", "efficientnet", "--n-trials", "10", "--dataset", "13_rotated_rastrigin_50d.npz"] + dataset_flag + [loading_flag],
                 "QUICK TEST: EfficientNet - 10 trials on 1 dataset (2D NCTD)"
             )
         elif choice == "2":
             # Model selection for single model quick tune
             print("\nSelect model for tuning:")
             print("  [1] EfficientNet (default)")
-            print("  [2] CNN")
+            print("  [2] CNN (nctd_cnn)")
             model_choice = input("Enter choice [1-2]: ").strip() or "1"
-            model = "efficientnet" if model_choice == "1" else "cnn"
+            model = "efficientnet" if model_choice == "1" else "nctd_cnn"
+            
+            ds_input = input("\nEnter dataset name (e.g. 13_rotated_rastrigin_50d) mapping or press Enter for ALL: ").strip()
+            ds_args = ["--dataset", ds_input] if ds_input else []
+
             run_command(
-                ["python", "hp_tuning.py", "--model", model, "--n-trials", "50"] + dataset_flag + [loading_flag],
-                f"SINGLE MODEL - QUICK TUNE: {model.upper()} - 50 trials (2D NCTD)"
+                ["python", "hp_tuning.py", "--model", model, "--method", "ours", "--n-trials", "50"] + ds_args + dataset_flag + [loading_flag],
+                f"SINGLE MODEL - QUICK TUNE: {model.upper()} (ours) - 50 trials (2D NCTD)"
+            )
+            run_command(
+                ["python", "hp_tuning.py", "--model", model, "--method", "NCTD", "--n-trials", "50"] + ds_args + dataset_flag + [loading_flag],
+                f"SINGLE MODEL - QUICK TUNE: {model.upper()} (NCTD) - 50 trials (2D NCTD)"
             )
         elif choice == "3":
             # Model selection for single model full tune
             print("\nSelect model for tuning:")
             print("  [1] EfficientNet (default)")
-            print("  [2] CNN")
+            print("  [2] CNN (nctd_cnn)")
             model_choice = input("Enter choice [1-2]: ").strip() or "1"
-            model = "efficientnet" if model_choice == "1" else "cnn"
+            model = "efficientnet" if model_choice == "1" else "nctd_cnn"
+            
+            ds_input = input("\nEnter dataset name (e.g. 13_rotated_rastrigin_50d) mapping or press Enter for ALL: ").strip()
+            ds_args = ["--dataset", ds_input] if ds_input else []
+
             run_command(
-                ["python", "hp_tuning.py", "--model", model, "--n-trials", "100"] + dataset_flag + [loading_flag],
-                f"SINGLE MODEL - FULL TUNE: {model.upper()} - 100 trials (2D NCTD)"
+                ["python", "hp_tuning.py", "--model", model, "--method", "ours", "--n-trials", "100"] + ds_args + dataset_flag + [loading_flag],
+                f"SINGLE MODEL - FULL TUNE: {model.upper()} (ours) - 100 trials (2D NCTD)"
+            )
+            run_command(
+                ["python", "hp_tuning.py", "--model", model, "--method", "NCTD", "--n-trials", "100"] + ds_args + dataset_flag + [loading_flag],
+                f"SINGLE MODEL - FULL TUNE: {model.upper()} (NCTD) - 100 trials (2D NCTD)"
             )
         elif choice == "4":
             parallel_flags = get_parallel_flags("2")

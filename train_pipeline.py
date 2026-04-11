@@ -249,49 +249,119 @@ def _get_dirs(model_type: str, method_name: str) -> tuple:
 # ═══════════════════════════════════════════════════════════════════════════════
 # DATA LOADING
 # ═══════════════════════════════════════════════════════════════════════════════
+class LazyXDataset:
+    def __init__(self, dataset_dir, cache_size=2):
+        self.files = sorted([
+            os.path.join(dataset_dir, f)
+            for f in os.listdir(dataset_dir)
+            if f.endswith(".pt")
+        ])
+        self.index_map = []
+        self.y_labels = []
+        self.cache = {}
+        self.cache_order = []
+        self.cache_size = cache_size
+
+        for file_idx, file in enumerate(self.files):
+            data = torch.load(file, map_location="cpu", weights_only=True)
+            size = data['X'].shape[0]
+            for i in range(size):
+                self.index_map.append((file_idx, i))
+                self.y_labels.append(data['y'][i].item())
+            del data
+        self.y = torch.tensor(self.y_labels, dtype=torch.long)
+
+    def __len__(self):
+        return len(self.index_map)
+
+    def _load_file(self, file_idx):
+        if file_idx in self.cache:
+            return self.cache[file_idx]
+
+        if len(self.cache) >= self.cache_size:
+            old = self.cache_order.pop(0)
+            del self.cache[old]
+
+        data = torch.load(self.files[file_idx], map_location="cpu", weights_only=True)
+        self.cache[file_idx] = data
+        self.cache_order.append(file_idx)
+        return data
+
+    def __getitem__(self, idx):
+        file_idx, sample_idx = self.index_map[idx]
+        data = self._load_file(file_idx)
+        return data['X'][sample_idx]
+
 def load_2d_datasets(
     dataset_filename: str,
     method_name: str,
     main_dir: str = DATA_DIR,
     logger: logging.Logger = None,
+    lazy_loading: bool = False,
+    full_loading: bool = False,
 ):
     """
-    Loads a processed .pt file → (X, y) both on CPU.
-    X: (N, 3, H, W)  y: (N,)
+    Loads processed dataset.
+    Returns X (Tensor or LazyXDataset) and y (Tensor).
     """
     log       = logger or _master_logger()
     base_name = os.path.splitext(dataset_filename)[0]
-    path      = os.path.join(main_dir, method_name, f"processed_{base_name}.pt")
- 
-    log.debug(f"Loading: {path}")
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Processed file not found: {path}")
- 
-    data = torch.load(path, map_location="cpu", weights_only=True)
-    X, y = data["X"], data["y"]
-    log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}  classes={y.unique().numel()}")
-    return X, y
+    
+    # Chunked directory path vs singular file path
+    dir_path = os.path.join(main_dir, method_name, base_name)
+    file_path = os.path.join(main_dir, method_name, f"processed_{base_name}.pt")
+    
+    if os.path.isdir(dir_path) and (lazy_loading or full_loading):
+        if lazy_loading:
+            log.debug(f"Lazy loading chunked dataset: {dir_path}")
+            lazy_ds = LazyXDataset(dir_path)
+            return lazy_ds, lazy_ds.y
+        else:
+            log.debug(f"Full loading chunked dataset: {dir_path}")
+            files = sorted([os.path.join(dir_path, f) for f in os.listdir(dir_path) if f.endswith(".pt")])
+            X_all, y_all = [], []
+            for f in files:
+                data = torch.load(f, map_location="cpu", weights_only=True)
+                X_all.append(data['X'])
+                y_all.append(data['y'])
+            X = torch.cat(X_all, dim=0)
+            y = torch.cat(y_all, dim=0)
+            log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}")
+            return X, y
+    else:
+        log.debug(f"Loading singular: {file_path}")
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Processed file not found: {file_path}")
+        data = torch.load(file_path, map_location="cpu", weights_only=True)
+        X, y = data["X"], data["y"]
+        log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}  classes={y.unique().numel()}")
+        return X, y
+
  
  
 # ═══════════════════════════════════════════════════════════════════════════════
 # DATASET
 # ═══════════════════════════════════════════════════════════════════════════════
 class Tabular2ImageDataset(Dataset):
-    def __init__(self, X, y, model_type="efficientnet", transform=None):
+    def __init__(self, X, y, model_type="efficientnet", transform=None, indices=None):
         self.X, self.y    = X, y.long()
         self.model_type   = model_type
         self.transform    = transform
+        self.indices      = indices
  
     def __len__(self):
-        return len(self.y)
+        return len(self.indices) if self.indices is not None else len(self.y)
  
     def __getitem__(self, idx):
-        img = self.X[idx]
+        real_idx = self.indices[idx] if self.indices is not None else idx
+        img = self.X[real_idx]
+        target = self.y[real_idx]
+
         if self.model_type == "nctd_cnn":
             img = img.mean(dim=0, keepdim=True)   # (3,H,W) → (1,H,W) grayscale
         if self.transform:
             img = self.transform(img)
-        return img, self.y[idx]
+        return img, target
  
  
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -638,9 +708,9 @@ def train_for_method_and_model(
             f"split: train={len(train_idx)}  val={len(val_idx)}  test={len(test_idx)}"
         )
  
-        train_ds = Tabular2ImageDataset(X[train_idx], y[train_idx], model_type, train_tf)
-        val_ds   = Tabular2ImageDataset(X[val_idx],   y[val_idx],   model_type, val_tf)
-        test_ds  = Tabular2ImageDataset(X[test_idx],  y[test_idx],  model_type, val_tf)
+        train_ds = Tabular2ImageDataset(X, y, model_type, train_tf, indices=train_idx)
+        val_ds   = Tabular2ImageDataset(X, y, model_type, val_tf, indices=val_idx)
+        test_ds  = Tabular2ImageDataset(X, y, model_type, val_tf, indices=test_idx)
  
         # num_workers=0: data is already loaded into RAM as tensors — no disk
         # I/O means workers add zero throughput benefit.  More importantly,
@@ -770,7 +840,13 @@ if __name__ == "__main__":
     parser.add_argument("--method", choices=["NCTD", "ours"], help="Conversion method")
     parser.add_argument("--model",  choices=["efficientnet", "nctd_cnn"], help="Backbone")
     parser.add_argument("--all",    action="store_true", help="Run all 4 combos")
+    parser.add_argument("--dataset-root", type=str, default=DATA_DIR, help="Set primary datasets folder name")
+    parser.add_argument("--lazy-loading", action="store_true", help="Use lazy chunked generation logic")
+    parser.add_argument("--full-loading", action="store_true", help="Use full chunked in-memory logic")
     args = parser.parse_args()
+    
+    # Overwrite global DATA_DIR safely for module execution
+    DATA_DIR = args.dataset_root
  
     COMBOS = [
         ("NCTD", "nctd_cnn"),

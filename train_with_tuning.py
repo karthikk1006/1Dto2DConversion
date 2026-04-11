@@ -295,6 +295,9 @@ def train_for_method_and_model_with_tuning(
     method_name: str,
     datasets_list: list,
     model_type: str = "efficientnet",
+    dataset_root: str = DATA_DIR,
+    lazy_loading: bool = False,
+    full_loading: bool = False,
 ):
     """
     Train + evaluate every dataset for one (method × model) combo using tuned hyperparameters.
@@ -349,7 +352,10 @@ def train_for_method_and_model_with_tuning(
         
         # Load dataset
         try:
-            X, y = load_2d_datasets(dataset_filename, method_name, DATA_DIR, logger)
+            X, y = load_2d_datasets(
+                dataset_filename, method_name, dataset_root, logger,
+                lazy_loading=lazy_loading, full_loading=full_loading
+            )
         except FileNotFoundError as exc:
             logger.error(f"         SKIPPED — {exc}")
             continue
@@ -389,9 +395,9 @@ def train_for_method_and_model_with_tuning(
             tuning_status.append((ds_stem, "default"))
         
         # Create datasets
-        train_ds = Tabular2ImageDataset(X[train_idx], y[train_idx], model_type, train_tf)
-        val_ds = Tabular2ImageDataset(X[val_idx], y[val_idx], model_type, val_tf)
-        test_ds = Tabular2ImageDataset(X[test_idx], y[test_idx], model_type, val_tf)
+        train_ds = Tabular2ImageDataset(X, y, model_type, train_tf, indices=train_idx)
+        val_ds = Tabular2ImageDataset(X, y, model_type, val_tf, indices=val_idx)
+        test_ds = Tabular2ImageDataset(X, y, model_type, val_tf, indices=test_idx)
         
         _pin = DEVICE.type == "cuda"
         train_loader = DataLoader(
@@ -516,7 +522,16 @@ if __name__ == "__main__":
         help="Specific dataset (if not provided, all datasets used)",
     )
     parser.add_argument("--all", action="store_true", help="Run all 4 combos")
+    parser.add_argument("--dataset-root", type=str, default=DATA_DIR, help="Set primary datasets folder name")
+    parser.add_argument("--lazy-loading", action="store_true", help="Use lazy chunked generation logic")
+    parser.add_argument("--full-loading", action="store_true", help="Use full chunked in-memory logic")
+    parser.add_argument("--output-dir", type=str, help="Output directory")
+
     args = parser.parse_args()
+    
+    # Overwrite DATA_DIR safely for module functions from train_pipeline
+    import train_pipeline
+    train_pipeline.DATA_DIR = args.dataset_root
     
     COMBOS = [
         ("NCTD", "nctd_cnn"),
@@ -537,11 +552,19 @@ if __name__ == "__main__":
     if args.all:
         for method, model in COMBOS:
             t0 = time.time()
-            train_for_method_and_model_with_tuning(method, datasets_to_train, model_type=model)
+            train_for_method_and_model_with_tuning(
+                method, datasets_to_train, model_type=model,
+                dataset_root=args.dataset_root,
+                lazy_loading=args.lazy_loading,
+                full_loading=args.full_loading
+            )
             master.debug(f"combo {method}+{model} finished in {time.time()-t0:.1f}s")
     elif args.method and args.model:
         train_for_method_and_model_with_tuning(
-            args.method, datasets_to_train, model_type=args.model
+            args.method, datasets_to_train, model_type=args.model,
+            dataset_root=args.dataset_root,
+            lazy_loading=args.lazy_loading,
+            full_loading=args.full_loading
         )
     else:
         parser.print_help()
