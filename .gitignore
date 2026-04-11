@@ -2,3 +2,5 @@
 /__pycache__
 *.pyc
 /results
+/nctd_datasets
+/2d_nctd_datasets
