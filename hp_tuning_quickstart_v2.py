@@ -126,10 +126,15 @@ Choose an option:
     • Display comprehensive documentation
     • Best for: Learning more details
 
+[10] FULL TUNE CNN (BOTH METHODS, ALL DATASETS) + TRAIN
+    • Tune CNN model for both 'ours' and 'NCTD' methods across datasets
+    • Train CNN with tuned hyperparameters
+    • Best for: Running the complete CNN pipeline
+
 [0] EXIT
 
 """)
-    choice = input("Enter choice [0-9]: ").strip()
+    choice = input("Enter choice [0-10]: ").strip()
     return choice
 
 
@@ -249,9 +254,9 @@ Press Enter to continue...
             datasets = [d for d in os.listdir(os.path.join("2d_nctd_datasets", "ours")) if os.path.isdir(os.path.join("2d_nctd_datasets", "ours", d))][:10]
             for method in methods:
                 for dataset in datasets:
-                    print(f"\nTuning: Method={method}, Dataset={dataset}, Model=cnn")
+                    print(f"\nTuning: Method={method}, Dataset={dataset}, Model=nctd_cnn")
                     run_command(
-                        ["python", "hp_tuning.py", "--model", "cnn", "--method", method, "--dataset", dataset, "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
+                        ["python", "hp_tuning.py", "--model", "nctd_cnn", "--method", method, "--dataset", dataset, "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
                         f"HP TUNING: CNN, Method={method}, Dataset={dataset}, 100 trials, output to results_nctd_dataset"
                     )
             print("\nStarting training with tuned parameters for all combinations...")
