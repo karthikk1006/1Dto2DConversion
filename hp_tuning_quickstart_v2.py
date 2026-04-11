@@ -221,26 +221,26 @@ Press Enter to continue...
             parallel_flags = get_parallel_flags("4")
             print("\n[STEP 1] Tuning Method: ours...")
             if not run_command(
-                ["python", "hp_tuning.py", "--all", "--method", "ours", "--n-trials", "100"] + parallel_flags + dataset_flag + [loading_flag],
-                "STEP 1/3: HP TUNING - Method: ours (2D NCTD)"
+                ["python", "hp_tuning.py", "--all", "--method", "ours", "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
+                "STEP 1/3: HP TUNING - Method: ours (2D NCTD) -> results_nctd_dataset"
             ):
                 print("HP Tuning ours failed. Aborting workflow.")
                 continue
             print("\n[STEP 2] Tuning Method: NCTD...")
             if not run_command(
-                ["python", "hp_tuning.py", "--all", "--method", "NCTD", "--n-trials", "100"] + parallel_flags + dataset_flag + [loading_flag],
-                "STEP 2/3: HP TUNING - Method: NCTD (2D NCTD)"
+                ["python", "hp_tuning.py", "--all", "--method", "NCTD", "--n-trials", "100", "--output-dir", "results_nctd_dataset"] + parallel_flags + dataset_flag + [loading_flag],
+                "STEP 2/3: HP TUNING - Method: NCTD (2D NCTD) -> results_nctd_dataset"
             ):
                 print("HP Tuning NCTD failed. Aborting workflow.")
                 continue
             print("\n[STEP 3] Starting Training and Evaluation with Tuned Hyperparameters...")
             if not run_command(
-                ["python", "train_with_tuning.py", "--all"] + dataset_flag + [loading_flag],
-                "STEP 3/3: TRAINING WITH TUNING (All Combinations, 2D NCTD)"
+                ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
+                "STEP 3/3: TRAINING WITH TUNING (All Combinations, 2D NCTD) -> results_nctd_dataset"
             ):
                 print("Training failed.")
                 continue
-            print("\nResults saved properly. Test results are stored in results/tuned_results/... (2D NCTD)")
+            print("\nResults saved properly. Test results are stored in results_nctd_dataset/tuned_results/... (2D NCTD)")
         elif choice == "6":
             run_command(
                 ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
