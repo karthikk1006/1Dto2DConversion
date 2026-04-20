@@ -482,6 +482,12 @@ def tune_hyperparameters(
     
     try:
         # Load dataset
+        # If absolute path provided, split it to override root
+        if os.path.isabs(dataset_filename):
+            dataset_root = os.path.dirname(dataset_filename)
+            dataset_filename = os.path.basename(dataset_filename)
+            logger.info(f"Using absolute dataset path. Root: {dataset_root}, File: {dataset_filename}")
+
         X, y = load_2d_datasets(
             dataset_filename, method_name, dataset_root, logger,
             lazy_loading=lazy_loading, full_loading=full_loading

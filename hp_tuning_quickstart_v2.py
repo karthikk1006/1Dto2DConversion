@@ -137,10 +137,15 @@ Choose an option:
     • Train all models with tuned hyperparameters
     • Best for: Comprehensive pipeline run (auto-discovers datasets)
 
+[12] CUSTOM SINGLE COMBINATION
+    • Tune 1 specific Model, Method, and Dataset combo
+    • Supports absolute Dataset Paths and custom Output Roots
+    • Best for: targeted experiments
+
 [0] EXIT
 
 """)
-    choice = input("Enter choice [0-11]: ").strip()
+    choice = input("Enter choice [0-12]: ").strip()
     return choice
 
 
@@ -303,6 +308,82 @@ Press Enter to continue...
                 ["python", "train_with_tuning.py", "--all", "--output-dir", "results_nctd_dataset"] + dataset_flag + [loading_flag],
                 "TRAINING: Use tuned hyperparameters for BOTH MODELS, both methods, all datasets, output to results_nctd_dataset",
                 auto_confirm=auto_yes
+            )
+        elif choice == "12":
+            print_section("CUSTOM SINGLE COMBINATION")
+            
+            # 1. Select Model
+            print("\nSelect model:")
+            print("  [1] EfficientNet")
+            print("  [2] CNN (nctd_cnn)")
+            m_choice = input("Enter choice [1-2, default 2]: ").strip() or "2"
+            model = "efficientnet" if m_choice == "1" else "nctd_cnn"
+            
+            # 2. Select Method
+            print("\nSelect conversion method:")
+            print("  [1] ours")
+            print("  [2] NCTD")
+            meth_choice = input("Enter choice [1-2, default 2]: ").strip() or "2"
+            method = "ours" if meth_choice == "1" else "NCTD"
+            
+            # 3. Dataset Path
+            ds_input = input("\nEnter Dataset Path (folder name, relative path, or full path): ").strip()
+            
+            # Smart Path Splitting
+            # Example: C:/data/2d_nctd_datasets/ours/ds10
+            # If path contains 'ours' or 'nctd', we split it to find the root.
+            final_ds_root = "2d_nctd_datasets"
+            final_ds_name = ds_input
+            
+            normalized_path = ds_input.replace('\\', '/')
+            path_parts = normalized_path.lower().split('/')
+            
+            # Find index of method in path
+            method_idx = -1
+            if 'ours' in path_parts:
+                method_idx = path_parts.index('ours')
+            elif 'nctd' in path_parts:
+                method_idx = path_parts.index('nctd')
+            
+            if method_idx != -1 and method_idx > 0:
+                # Reconstruct root (everything before the method)
+                # and dataset name (everything after the method)
+                raw_parts = ds_input.replace('\\', '/').split('/')
+                final_ds_root = '/'.join(raw_parts[:method_idx])
+                final_ds_name = '/'.join(raw_parts[method_idx+1:])
+                print(f"Detected structured path. Using Root: {final_ds_root}, Dataset: {final_ds_name}")
+            elif '/' in normalized_path:
+                # If it's a general path but doesn't follow the ours/nctd structure, 
+                # we treat the whole thing as an absolute path in hp_tuning.py
+                final_ds_name = os.path.abspath(ds_input)
+                final_ds_root = "" # hp_tuning.py will handle absolute path
+            
+            # 4. Output Root
+            out_root = input("\nEnter Output Results Root (default: results_nctd_dataset): ").strip() or "results_nctd_dataset"
+            
+            # 5. Trials
+            n_trials = input("\nNumber of trials (default 100): ").strip() or "100"
+            
+            # Construct command
+            cmd = [
+                "python", "hp_tuning.py",
+                "--model", model,
+                "--method", method,
+                "--dataset", final_ds_name,
+                "--n-trials", n_trials,
+                "--output-dir", out_root
+            ]
+            
+            # Add dataset root if not using absolute path fallback
+            if final_ds_root:
+                cmd.extend(["--dataset-root", final_ds_root])
+            
+            # Add loading strategy and any other flags
+            cmd.append(loading_flag)
+            
+            run_command(
+                cmd,
+                f"CUSTOM TUNE: {model.upper()} | {method} | {final_ds_name} | Root={final_ds_root} | Out={out_root}"
             )
         elif choice == "7":
             print_section("ALL-IN-ONE WORKFLOW")
