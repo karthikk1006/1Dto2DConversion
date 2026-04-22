@@ -79,7 +79,7 @@ def train_standard_model(
     """
     model = model.to(DEVICE)
     criterion = nn.CrossEntropyLoss().to(DEVICE)
-    optimizer = optim.Adam(model.parameters(), lr=0.0005, weight_decay=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=0.0001, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=40)
     scaler = torch.amp.GradScaler(enabled=_USE_AMP)
 
@@ -93,6 +93,9 @@ def train_standard_model(
     best_val_acc = -1.0
     base_name = os.path.splitext(dataset_name)[0]
     best_path = os.path.join(models_dir, f"standard_best_{base_name}.pth")
+    
+    # Save initial state as a fallback
+    torch.save(model.state_dict(), best_path)
     
     epochs = 40
     patience = 10
@@ -273,9 +276,13 @@ def main():
                 # Train
                 best_path, _ = train_standard_model(model, train_loader, val_loader, ds_name, models_dir, logger)
                 
-                # Evaluate
-                model.load_state_dict(torch.load(best_path, map_location=DEVICE, weights_only=True))
-                metrics, _, _ = evaluate_model(model, test_loader, logger)
+                # Evaluate (only if the best_path exists)
+                if os.path.exists(best_path):
+                    model.load_state_dict(torch.load(best_path, map_location=DEVICE, weights_only=True))
+                    metrics, _, _ = evaluate_model(model, test_loader, logger)
+                else:
+                    logger.warning(f"Skipping evaluation for {ds_name} due to training failure.")
+                    continue
                 
                 # Save metrics
                 ds_stem = os.path.splitext(ds_name)[0]
