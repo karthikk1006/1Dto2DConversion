@@ -79,7 +79,7 @@ def train_standard_model(
     """
     model = model.to(DEVICE)
     criterion = nn.CrossEntropyLoss().to(DEVICE)
-    optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
+    optimizer = optim.Adam(model.parameters(), lr=0.0005, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=40)
     scaler = torch.amp.GradScaler(enabled=_USE_AMP)
 
@@ -121,11 +121,15 @@ def train_standard_model(
                 loss = criterion(model(Xb), yb)
             
             if torch.isnan(loss):
-                logger.warning(f"  [DIVERGENCE] NaN loss detected at epoch {epoch+1}. Model may be unstable.")
+                logger.warning(f"  [DIVERGENCE] NaN loss detected at epoch {epoch+1}. Stopping training for {dataset_name}.")
+                if best_weights is not None:
+                    model.load_state_dict(best_weights)
+                epoch_bar.close()
+                return best_path, best_val_acc
 
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
             scaler.step(optimizer)
             scaler.update()
             running_loss += loss.item()

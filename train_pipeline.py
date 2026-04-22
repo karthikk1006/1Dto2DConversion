@@ -326,6 +326,9 @@ def load_2d_datasets(
                 y_all.append(data['y'])
             X = torch.cat(X_all, dim=0)
             y = torch.cat(y_all, dim=0)
+            if torch.isnan(X).any():
+                log.warning(f"NaN detected in input features (X) for {dataset_filename}. Replacing with zeros.")
+                X = torch.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
             log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}")
             return X, y
     else:
@@ -334,6 +337,9 @@ def load_2d_datasets(
             raise FileNotFoundError(f"Processed file not found: {file_path}")
         data = torch.load(file_path, map_location="cpu", weights_only=True)
         X, y = data["X"], data["y"]
+        if torch.isnan(X).any():
+            log.warning(f"NaN detected in input features (X) for {dataset_filename}. Replacing with zeros.")
+            X = torch.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
         log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}  classes={y.unique().numel()}")
         return X, y
 
@@ -576,7 +582,7 @@ def train_uniform_model(
                 loss = criterion(model(Xb), yb)
             scaler.scale(loss).backward()
             scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=0.5)
             scaler.step(optimizer)
             scaler.update()
             running_loss += loss.item()
