@@ -119,7 +119,13 @@ def train_standard_model(
             optimizer.zero_grad(set_to_none=True)
             with torch.amp.autocast(device_type=DEVICE.type, enabled=_USE_AMP):
                 loss = criterion(model(Xb), yb)
+            
+            if torch.isnan(loss):
+                logger.warning(f"  [DIVERGENCE] NaN loss detected at epoch {epoch+1}. Model may be unstable.")
+
             scaler.scale(loss).backward()
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             scaler.step(optimizer)
             scaler.update()
             running_loss += loss.item()

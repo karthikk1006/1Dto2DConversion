@@ -474,8 +474,10 @@ def evaluate_model(model: nn.Module, loader: DataLoader, logger: logging.Logger)
     # Numerically stable softmax → P(class=1) for ROC-AUC
     shifted = L - L.max(axis=1, keepdims=True)
     exp_L   = np.exp(shifted)
-    proba1  = exp_L[:, 1] / exp_L.sum(axis=1)
- 
+    probas  = exp_L / exp_L.sum(axis=1, keepdims=True)
+    
+    num_classes = L.shape[1]
+    
     # roc_auc_score requires both classes in the test set
     if len(np.unique(T)) < 2:
         roc_auc = float("nan")
@@ -484,15 +486,21 @@ def evaluate_model(model: nn.Module, loader: DataLoader, logger: logging.Logger)
             f"({np.unique(T).tolist()}, n={len(T)})."
         )
     else:
-        roc_auc = float(roc_auc_score(T, proba1))
- 
+        if num_classes == 2:
+            roc_auc = float(roc_auc_score(T, probas[:, 1]))
+        else:
+            roc_auc = float(roc_auc_score(T, probas, multi_class='ovr'))
+
+    # F1, Prec, Rec average setting
+    avg_setting = "binary" if num_classes == 2 else "macro"
+
     metrics = {
         "accuracy":          float(accuracy_score(T, P)),
-        "f1":                float(f1_score(T, P, average="binary",   zero_division=0)),
+        "f1":                float(f1_score(T, P, average=avg_setting,   zero_division=0)),
         "f1_macro":          float(f1_score(T, P, average="macro",    zero_division=0)),
         "f1_weighted":       float(f1_score(T, P, average="weighted", zero_division=0)),
-        "precision":         float(precision_score(T, P, average="binary", zero_division=0)),
-        "recall":            float(recall_score(T, P,    average="binary", zero_division=0)),
+        "precision":         float(precision_score(T, P, average=avg_setting, zero_division=0)),
+        "recall":            float(recall_score(T, P,    average=avg_setting, zero_division=0)),
         "balanced_accuracy": float(balanced_accuracy_score(T, P)),
         "roc_auc":           roc_auc,
         "mcc":               float(matthews_corrcoef(T, P)),
@@ -567,6 +575,8 @@ def train_uniform_model(
             with torch.amp.autocast(device_type=DEVICE.type, enabled=_USE_AMP):
                 loss = criterion(model(Xb), yb)
             scaler.scale(loss).backward()
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
             scaler.step(optimizer)
             scaler.update()
             running_loss += loss.item()
