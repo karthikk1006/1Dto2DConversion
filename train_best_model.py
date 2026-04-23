@@ -216,7 +216,6 @@ def train_best_model(
 def main():
     parser = argparse.ArgumentParser(description="Train CNN with best found hyperparameters")
     parser.add_argument("--dataset-root", type=str, required=True, help="Root folder containing 'ours' and 'NCTD' datasets")
-    parser.add_argument("--method", choices=["ours", "NCTD"], default="ours", help="Method to train")
     parser.add_argument("--output-dir", type=str, default="best_models_run", help="Output directory")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     args = parser.parse_args()
@@ -235,67 +234,99 @@ def main():
     analysis_path = "cnn_improvement_analysis.md"
     best_params_map = parse_best_params(dump_path, analysis_path)
     
-    method_path = os.path.join(args.dataset_root, args.method)
-    if not os.path.exists(method_path):
-        logger.error(f"Path {method_path} not found.")
-        return
+    methods = ["ours", "NCTD"]
+    all_final_metrics = []
 
-    # Discover datasets
-    datasets = []
-    for item in os.listdir(method_path):
-        name = item
-        if name.startswith("processed_"): name = name[len("processed_"):]
-        name = os.path.splitext(name)[0]
-        if name not in datasets: datasets.append(name)
-    
-    logger.info(f"Starting training for {len(datasets)} datasets using {args.method.upper()} method.")
-
-    for ds_name in datasets:
-        if ds_name not in best_params_map or args.method not in best_params_map[ds_name]:
-            logger.warning(f"No best params found for {ds_name} ({args.method}). Skipping.")
+    for method in methods:
+        method_path = os.path.join(args.dataset_root, method)
+        if not os.path.exists(method_path):
+            logger.warning(f"Path {method_path} not found. Skipping {method}.")
             continue
-            
-        hp = best_params_map[ds_name][args.method]
-        logger.info(f"Training {ds_name} with params: {hp}")
+
+        # Create subdirectories
+        method_output_dir = os.path.join(args.output_dir, method)
+        metrics_dir = os.path.join(method_output_dir, "metrics")
+        models_dir = os.path.join(method_output_dir, "models")
+        os.makedirs(metrics_dir, exist_ok=True)
+        os.makedirs(models_dir, exist_ok=True)
+
+        # Discover datasets
+        datasets = []
+        for item in os.listdir(method_path):
+            name = item
+            if name.startswith("processed_"): name = name[len("processed_"):]
+            name = os.path.splitext(name)[0]
+            if name not in datasets: datasets.append(name)
         
-        try:
-            # Load Data
-            X, y = load_2d_datasets(ds_name, args.method, args.dataset_root, logger)
-            num_classes = int(y.unique().numel())
-            num_samples = int(len(y))
-            
-            # Split
-            train_idx, test_idx = train_test_split(range(num_samples), test_size=0.2, stratify=y.cpu().numpy(), random_state=args.seed)
-            train_idx, val_idx = train_test_split(train_idx, test_size=0.125, stratify=y[train_idx].cpu().numpy(), random_state=args.seed)
-            
-            train_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=train_idx)
-            val_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=val_idx)
-            test_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=test_idx)
-            
-            batch_size = hp.get("batch_size", 32)
-            train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-            val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
-            test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
-            
-            # Model
-            model = BestCNN(num_classes=num_classes, dropout_rate=hp.get("dropout_rate", 0.3))
-            
-            # Train
-            best_path, best_val = train_best_model(model, train_loader, val_loader, ds_name, args.output_dir, logger, hp)
-            
-            # Evaluate
-            model.load_state_dict(torch.load(best_path, map_location=DEVICE, weights_only=True))
-            metrics, _, _ = evaluate_model(model, test_loader, logger)
-            
-            logger.info(f"DONE: {ds_name} | Best Val: {best_val:.4f} | Test Acc: {metrics['accuracy']:.4f}")
-            
-            # Save results
-            with open(os.path.join(args.output_dir, f"{ds_name}_metrics.json"), "w") as f:
-                json.dump(metrics, f, indent=4)
+        logger.info(f"\n{'='*60}\nStarting training for {len(datasets)} datasets using {method.upper()} method.\n{'='*60}")
+
+        for ds_name in datasets:
+            if ds_name not in best_params_map or method not in best_params_map[ds_name]:
+                logger.warning(f"No best params found for {ds_name} ({method}). Skipping.")
+                continue
                 
-        except Exception as e:
-            logger.error(f"Failed {ds_name}: {str(e)}")
-            continue
+            hp = best_params_map[ds_name][method]
+            logger.info(f"Processing {ds_name} | Method: {method}")
+            
+            try:
+                # Load Data
+                X, y = load_2d_datasets(ds_name, method, args.dataset_root, logger)
+                num_classes = int(y.unique().numel())
+                num_samples = int(len(y))
+                
+                # Split
+                train_idx, test_idx = train_test_split(range(num_samples), test_size=0.2, stratify=y.cpu().numpy(), random_state=args.seed)
+                train_idx, val_idx = train_test_split(train_idx, test_size=0.125, stratify=y[train_idx].cpu().numpy(), random_state=args.seed)
+                
+                train_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=train_idx)
+                val_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=val_idx)
+                test_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=test_idx)
+                
+                batch_size = hp.get("batch_size", 32)
+                train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+                val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
+                test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+                
+                # Model
+                model = BestCNN(num_classes=num_classes, dropout_rate=hp.get("dropout_rate", 0.3))
+                
+                # Train
+                best_path, best_val = train_best_model(model, train_loader, val_loader, ds_name, models_dir, logger, hp)
+                
+                # Evaluate
+                model.load_state_dict(torch.load(best_path, map_location=DEVICE, weights_only=True))
+                metrics, _, _ = evaluate_model(model, test_loader, logger)
+                
+                logger.info(f"DONE: {ds_name} | Test Acc: {metrics['accuracy']:.4f}")
+                
+                # Save individual results
+                metrics['dataset'] = ds_name
+                metrics['method'] = method
+                with open(os.path.join(metrics_dir, f"{ds_name}_metrics.json"), "w") as f:
+                    json.dump(metrics, f, indent=4)
+                
+                # Add to master list
+                all_final_metrics.append(metrics)
+                    
+            except Exception as e:
+                logger.error(f"Failed {ds_name}: {str(e)}")
+                continue
+
+    # Final Consolidated Report
+    if all_final_metrics:
+        master_metrics_path = os.path.join(args.output_dir, "consolidated_test_metrics.json")
+        with open(master_metrics_path, "w") as f:
+            json.dump(all_final_metrics, f, indent=4)
+        
+        # Also create a human-readable summary table in the log
+        logger.info(f"\n{'='*60}\nFINAL TEST METRICS SUMMARY\n{'='*60}")
+        logger.info(f"{'Dataset':<35} {'Method':<10} {'Accuracy':<10} {'MCC':<10}")
+        logger.info("-" * 70)
+        for m in all_final_metrics:
+            logger.info(f"{m['dataset']:<35} {m['method']:<10} {m['accuracy']:<10.4f} {m['mcc']:<10.4f}")
+        logger.info(f"{'='*60}")
+
+    logger.info(f"All training completed. Consolidated results at: {master_metrics_path}")
 
 if __name__ == "__main__":
     main()
