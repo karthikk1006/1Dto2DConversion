@@ -78,7 +78,7 @@ def parse_best_params(dump_path, analysis_path):
 
     # 1. Parse from all_tuned_results_full_dump.md (Markdown + JSON blocks)
     if os.path.exists(dump_path):
-        with open(dump_path, "r") as f:
+        with open(dump_path, "r", encoding="utf-8") as f:
             content = f.read()
         
         dataset_blocks = content.split("## Dataset: `")
@@ -99,7 +99,7 @@ def parse_best_params(dump_path, analysis_path):
 
     # 2. Parse from cnn_improvement_analysis.md (For missing DS datasets)
     if os.path.exists(analysis_path):
-        with open(analysis_path, "r") as f:
+        with open(analysis_path, "r", encoding="utf-8") as f:
             content = f.read()
             
         dataset_blocks = content.split("### Dataset: `")
@@ -218,7 +218,8 @@ def main():
     parser.add_argument("--dataset-root", type=str, required=True, help="Root folder containing 'ours' and 'NCTD' datasets")
     parser.add_argument("--output-dir", type=str, default="best_models_run", help="Output directory")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
-    parser.add_argument("--full-loading", action="store_true", help="Force full loading into RAM for chunked datasets (faster but uses more memory)")
+    parser.add_argument("--lazy-loading", action="store_true", help="Use lazy loading for directories")
+    parser.add_argument("--full-loading", action="store_true", help="Force full loading into RAM for chunked datasets")
     args = parser.parse_args()
 
     set_seed(args.seed)
