@@ -1,0 +1,43 @@
+{
+    "accuracy": 0.53,
+    "f1": 0.6016949152542372,
+    "f1_macro": 0.51426209177346,
+    "f1_weighted": 0.51426209177346,
+    "precision": 0.5220588235294118,
+    "recall": 0.71,
+    "balanced_accuracy": 0.53,
+    "roc_auc": 0.5791,
+    "mcc": 0.06431196942844082,
+    "cohen_kappa": 0.06000000000000005,
+    "num_classes": 2,
+    "num_samples": 200,
+    "per_class_report": {
+        "0": {
+            "precision": 0.546875,
+            "recall": 0.35,
+            "f1-score": 0.4268292682926829,
+            "support": 100.0
+        },
+        "1": {
+            "precision": 0.5220588235294118,
+            "recall": 0.71,
+            "f1-score": 0.6016949152542372,
+            "support": 100.0
+        },
+        "accuracy": 0.53,
+        "macro avg": {
+            "precision": 0.5344669117647058,
+            "recall": 0.53,
+            "f1-score": 0.51426209177346,
+            "support": 200.0
+        },
+        "weighted avg": {
+            "precision": 0.534466911764706,
+            "recall": 0.53,
+            "f1-score": 0.51426209177346,
+            "support": 200.0
+        }
+    },
+    "dataset": "digen24_2433",
+    "method": "ours"
+}

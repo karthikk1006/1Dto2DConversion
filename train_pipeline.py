@@ -73,6 +73,51 @@ import seaborn as sns
 from tqdm import tqdm
  
 # ═══════════════════════════════════════════════════════════════════════════════
+# ROBUST SPLITTING HELPERS
+# ═══════════════════════════════════════════════════════════════════════════════
+def safe_stratified_split(indices, y, test_size, random_state=42):
+    """
+    Performs a stratified split that handles classes with only 1 sample.
+    Samples from singleton classes are always placed in the training set.
+    """
+    y_numpy = y.cpu().numpy() if hasattr(y, 'cpu') else np.array(y)
+    
+    unique, counts = np.unique(y_numpy, return_counts=True)
+    class_counts = dict(zip(unique, counts))
+    
+    # Identify singletons
+    singletons = [cls for cls, count in class_counts.items() if count < 2]
+    
+    if not singletons:
+        # All classes have at least 2 samples, proceed normally
+        return train_test_split(indices, test_size=test_size, stratify=y_numpy, random_state=random_state)
+    
+    # Separate singletons
+    singleton_mask = np.isin(y_numpy, singletons)
+    singleton_indices = np.array(indices)[singleton_mask]
+    
+    multi_mask = ~singleton_mask
+    multi_indices = np.array(indices)[multi_mask]
+    multi_y = y_numpy[multi_mask]
+    
+    if len(multi_indices) < 2 or len(np.unique(multi_y)) < 2:
+        # Not enough samples/classes to stratify even after removing singletons
+        return train_test_split(indices, test_size=test_size, random_state=random_state)
+
+    try:
+        train_idx, test_idx = train_test_split(
+            multi_indices, test_size=test_size, stratify=multi_y, random_state=random_state
+        )
+        # Add singletons to training set
+        train_idx = np.concatenate([train_idx, singleton_indices])
+        return train_idx.tolist(), test_idx.tolist()
+    except Exception:
+        # Final fallback
+        return train_test_split(indices, test_size=test_size, random_state=random_state)
+
+
+ 
+# ═══════════════════════════════════════════════════════════════════════════════
 # PATHS
 # ═══════════════════════════════════════════════════════════════════════════════
 DATA_DIR    = "2d_datasets"
@@ -733,14 +778,13 @@ def train_for_method_and_model(
         logger.debug(f"samples={num_samples}  classes={num_classes}")
  
         # ── Stratified splits: 70% train / 10% val / 20% test ────────────────
-        train_idx, test_idx = train_test_split(
-            range(num_samples), test_size=0.2,
-            stratify=y.cpu().numpy(), random_state=42,
+        train_idx, test_idx = safe_stratified_split(
+            range(num_samples), y, test_size=0.2, random_state=42
         )
-        train_idx, val_idx = train_test_split(
-            train_idx, test_size=0.125,
-            stratify=y[train_idx].cpu().numpy(), random_state=42,
+        train_idx, val_idx = safe_stratified_split(
+            train_idx, y[train_idx], test_size=0.125, random_state=42
         )
+
         logger.debug(
             f"split: train={len(train_idx)}  val={len(val_idx)}  test={len(test_idx)}"
         )

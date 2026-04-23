@@ -69,11 +69,11 @@ from train_pipeline import (
     evaluate_model,
     efficientnet_train_transform,
     efficientnet_val_transform,
-    nctd_transform,
-    _master_logger,
     _combo_logger,
     _get_dirs,
+    safe_stratified_split,
 )
+
 
 # Suppress PyTorch lr_scheduler.step() warning about calling order
 # (The warning is a false positive in our case as we call it correctly)
@@ -364,14 +364,13 @@ def train_for_method_and_model_with_tuning(
         num_samples = int(len(y))
         
         # Split data
-        train_idx, test_idx = train_test_split(
-            range(num_samples), test_size=0.2,
-            stratify=y.cpu().numpy(), random_state=42,
+        train_idx, test_idx = safe_stratified_split(
+            range(num_samples), y, test_size=0.2, random_state=42
         )
-        train_idx, val_idx = train_test_split(
-            train_idx, test_size=0.125,
-            stratify=y[train_idx].cpu().numpy(), random_state=42,
+        train_idx, val_idx = safe_stratified_split(
+            train_idx, y[train_idx], test_size=0.125, random_state=42
         )
+
         
         # Load tuned hyperparameters
         hyperparams = load_tuned_hyperparams(model_type, method_name, dataset_filename)

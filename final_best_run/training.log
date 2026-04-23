@@ -1,0 +1,309 @@
+2026-04-23 13:36:28,170 | 
+============================================================
+Starting training for 50 datasets using OURS method.
+============================================================
+2026-04-23 13:36:28,170 | Processing DS01_breast_cancer | Method: ours
+2026-04-23 13:36:33,039 | Non-finite logits detected (280 values). Model may have diverged. Replacing with zeros for safe metric computation.
+2026-04-23 13:36:33,054 | DONE: DS01_breast_cancer | Test Acc: 0.6571
+2026-04-23 13:36:33,056 | Processing DS02_student_dropout | Method: ours
+2026-04-23 13:37:50,447 | DONE: DS02_student_dropout | Test Acc: 0.7582
+2026-04-23 13:37:50,449 | Processing DS03_adult | Method: ours
+2026-04-23 13:51:03,778 | DONE: DS03_adult | Test Acc: 0.5910
+2026-04-23 13:51:03,779 | Processing DS04_heart | Method: ours
+2026-04-23 13:51:12,213 | DONE: DS04_heart | Test Acc: 0.8424
+2026-04-23 13:51:12,214 | Processing DS06_dengue_chikungunya | Method: ours
+2026-04-23 13:55:33,617 | DONE: DS06_dengue_chikungunya | Test Acc: 0.6079
+2026-04-23 13:55:33,619 | Processing DS07_ringnorm | Method: ours
+2026-04-23 13:57:05,477 | DONE: DS07_ringnorm | Test Acc: 0.9851
+2026-04-23 13:57:05,477 | Processing 06_friedman1 | Method: ours
+2026-04-23 13:57:11,169 | DONE: 06_friedman1 | Test Acc: 0.8390
+2026-04-23 13:57:11,170 | Processing 07_friedman2 | Method: ours
+2026-04-23 13:57:13,227 | DONE: 07_friedman2 | Test Acc: 0.8732
+2026-04-23 13:57:13,228 | Processing 08_friedman3 | Method: ours
+2026-04-23 13:57:15,721 | DONE: 08_friedman3 | Test Acc: 0.7171
+2026-04-23 13:57:15,723 | Processing 13_rotated_rastrigin_50d | Method: ours
+2026-04-23 13:57:16,793 | DONE: 13_rotated_rastrigin_50d | Test Acc: 0.4000
+2026-04-23 13:57:16,794 | Processing digen10_8322 | Method: ours
+2026-04-23 13:57:22,595 | DONE: digen10_8322 | Test Acc: 0.8100
+2026-04-23 13:57:22,595 | Processing digen11_7270 | Method: ours
+2026-04-23 13:57:25,948 | DONE: digen11_7270 | Test Acc: 0.6550
+2026-04-23 13:57:25,949 | Processing digen12_8322 | Method: ours
+2026-04-23 13:57:29,637 | DONE: digen12_8322 | Test Acc: 0.6350
+2026-04-23 13:57:29,637 | Processing digen13_769 | Method: ours
+2026-04-23 13:57:33,514 | DONE: digen13_769 | Test Acc: 0.8250
+2026-04-23 13:57:33,515 | Processing digen14_769 | Method: ours
+2026-04-23 13:57:36,807 | DONE: digen14_769 | Test Acc: 0.5700
+2026-04-23 13:57:36,808 | Processing digen15_5311 | Method: ours
+2026-04-23 13:57:40,137 | DONE: digen15_5311 | Test Acc: 0.7700
+2026-04-23 13:57:40,137 | Processing digen16_5390 | Method: ours
+2026-04-23 13:57:43,236 | DONE: digen16_5390 | Test Acc: 0.8200
+2026-04-23 13:57:43,236 | Processing digen17_6949 | Method: ours
+2026-04-23 13:57:47,808 | DONE: digen17_6949 | Test Acc: 0.6450
+2026-04-23 13:57:47,811 | Processing digen18_5578 | Method: ours
+2026-04-23 13:57:51,956 | DONE: digen18_5578 | Test Acc: 0.5800
+2026-04-23 13:57:51,957 | Processing digen19_7270 | Method: ours
+2026-04-23 13:57:55,858 | DONE: digen19_7270 | Test Acc: 0.8150
+2026-04-23 13:57:55,859 | Processing digen1_6265 | Method: ours
+2026-04-23 13:57:57,236 | DONE: digen1_6265 | Test Acc: 0.9150
+2026-04-23 13:57:57,237 | Processing digen20_5191 | Method: ours
+2026-04-23 13:58:01,557 | DONE: digen20_5191 | Test Acc: 0.7800
+2026-04-23 13:58:01,558 | Processing digen21_6265 | Method: ours
+2026-04-23 13:58:03,683 | DONE: digen21_6265 | Test Acc: 0.5850
+2026-04-23 13:58:03,685 | Processing digen22_2433 | Method: ours
+2026-04-23 13:58:04,761 | DONE: digen22_2433 | Test Acc: 0.5050
+2026-04-23 13:58:04,761 | Processing digen23_5191 | Method: ours
+2026-04-23 13:58:07,948 | DONE: digen23_5191 | Test Acc: 0.5050
+2026-04-23 13:58:07,949 | Processing digen24_2433 | Method: ours
+2026-04-23 13:58:08,967 | DONE: digen24_2433 | Test Acc: 0.5300
+2026-04-23 13:58:08,968 | Processing digen25_2433 | Method: ours
+2026-04-23 13:58:14,045 | DONE: digen25_2433 | Test Acc: 0.6250
+2026-04-23 13:58:14,046 | Processing digen26_7270 | Method: ours
+2026-04-23 13:58:16,667 | DONE: digen26_7270 | Test Acc: 0.6600
+2026-04-23 13:58:16,667 | Processing digen27_860 | Method: ours
+2026-04-23 13:58:19,614 | DONE: digen27_860 | Test Acc: 0.5000
+2026-04-23 13:58:19,615 | Processing digen28_769 | Method: ours
+2026-04-23 13:58:21,869 | DONE: digen28_769 | Test Acc: 0.5350
+2026-04-23 13:58:21,872 | Processing digen29_8322 | Method: ours
+2026-04-23 13:58:24,117 | DONE: digen29_8322 | Test Acc: 0.5600
+2026-04-23 13:58:24,118 | Processing digen2_6949 | Method: ours
+2026-04-23 13:58:27,204 | DONE: digen2_6949 | Test Acc: 0.5250
+2026-04-23 13:58:27,206 | Processing digen30_4426 | Method: ours
+2026-04-23 13:58:29,570 | DONE: digen30_4426 | Test Acc: 0.5750
+2026-04-23 13:58:29,571 | Processing digen31_2433 | Method: ours
+2026-04-23 13:58:32,728 | DONE: digen31_2433 | Test Acc: 0.8300
+2026-04-23 13:58:32,728 | Processing digen32_5191 | Method: ours
+2026-04-23 13:58:35,079 | DONE: digen32_5191 | Test Acc: 0.6750
+2026-04-23 13:58:35,079 | Processing digen33_769 | Method: ours
+2026-04-23 13:58:38,021 | DONE: digen33_769 | Test Acc: 0.8750
+2026-04-23 13:58:38,022 | Processing digen34_769 | Method: ours
+2026-04-23 13:58:39,155 | DONE: digen34_769 | Test Acc: 0.5100
+2026-04-23 13:58:39,156 | Processing digen35_4426 | Method: ours
+2026-04-23 13:58:40,679 | DONE: digen35_4426 | Test Acc: 0.5900
+2026-04-23 13:58:40,680 | Processing digen36_466 | Method: ours
+2026-04-23 13:58:44,425 | DONE: digen36_466 | Test Acc: 0.7600
+2026-04-23 13:58:44,426 | Processing digen37_769 | Method: ours
+2026-04-23 13:58:49,648 | DONE: digen37_769 | Test Acc: 0.8950
+2026-04-23 13:58:49,649 | Processing digen38_4426 | Method: ours
+2026-04-23 13:58:53,669 | DONE: digen38_4426 | Test Acc: 0.6200
+2026-04-23 13:58:53,669 | Processing digen39_5578 | Method: ours
+2026-04-23 13:58:57,655 | DONE: digen39_5578 | Test Acc: 0.8850
+2026-04-23 13:58:57,657 | Processing digen3_769 | Method: ours
+2026-04-23 13:59:00,097 | DONE: digen3_769 | Test Acc: 0.9500
+2026-04-23 13:59:00,098 | Processing digen40_5390 | Method: ours
+2026-04-23 13:59:01,826 | DONE: digen40_5390 | Test Acc: 0.5250
+2026-04-23 13:59:01,827 | Processing digen4_860 | Method: ours
+2026-04-23 13:59:03,598 | DONE: digen4_860 | Test Acc: 0.5050
+2026-04-23 13:59:03,600 | Processing digen5_6949 | Method: ours
+2026-04-23 13:59:08,548 | DONE: digen5_6949 | Test Acc: 0.7800
+2026-04-23 13:59:08,549 | Processing digen6_466 | Method: ours
+2026-04-23 13:59:10,180 | DONE: digen6_466 | Test Acc: 0.5600
+2026-04-23 13:59:10,181 | Processing digen7_6949 | Method: ours
+2026-04-23 13:59:13,074 | DONE: digen7_6949 | Test Acc: 0.5800
+2026-04-23 13:59:13,074 | Processing digen8_4426 | Method: ours
+2026-04-23 13:59:16,311 | DONE: digen8_4426 | Test Acc: 0.5900
+2026-04-23 13:59:16,312 | Processing digen9_7270 | Method: ours
+2026-04-23 13:59:20,433 | DONE: digen9_7270 | Test Acc: 0.6700
+2026-04-23 13:59:20,435 | 
+============================================================
+Starting training for 50 datasets using NCTD method.
+============================================================
+2026-04-23 13:59:20,435 | No best params found for DS01_breast_cancer (NCTD). Skipping.
+2026-04-23 13:59:20,435 | Processing DS02_student_dropout | Method: NCTD
+2026-04-23 14:02:44,866 | DONE: DS02_student_dropout | Test Acc: 0.7774
+2026-04-23 14:02:44,867 | No best params found for DS03_adult (NCTD). Skipping.
+2026-04-23 14:02:44,867 | No best params found for DS04_heart (NCTD). Skipping.
+2026-04-23 14:02:44,867 | No best params found for DS06_dengue_chikungunya (NCTD). Skipping.
+2026-04-23 14:02:44,868 | Processing DS07_ringnorm | Method: NCTD
+2026-04-23 14:04:27,841 | DONE: DS07_ringnorm | Test Acc: 0.9851
+2026-04-23 14:04:27,844 | Processing 06_friedman1 | Method: NCTD
+2026-04-23 14:04:30,611 | DONE: 06_friedman1 | Test Acc: 0.6585
+2026-04-23 14:04:30,612 | Processing 07_friedman2 | Method: NCTD
+2026-04-23 14:04:33,838 | DONE: 07_friedman2 | Test Acc: 0.8878
+2026-04-23 14:04:33,839 | Processing 08_friedman3 | Method: NCTD
+2026-04-23 14:04:36,502 | DONE: 08_friedman3 | Test Acc: 0.4780
+2026-04-23 14:04:36,503 | Processing 13_rotated_rastrigin_50d | Method: NCTD
+2026-04-23 14:04:37,562 | DONE: 13_rotated_rastrigin_50d | Test Acc: 0.5000
+2026-04-23 14:04:37,562 | Processing digen10_8322 | Method: NCTD
+2026-04-23 14:04:39,947 | DONE: digen10_8322 | Test Acc: 0.5650
+2026-04-23 14:04:39,948 | Processing digen11_7270 | Method: NCTD
+2026-04-23 14:04:44,396 | DONE: digen11_7270 | Test Acc: 0.5700
+2026-04-23 14:04:44,397 | Processing digen12_8322 | Method: NCTD
+2026-04-23 14:04:45,685 | DONE: digen12_8322 | Test Acc: 0.4900
+2026-04-23 14:04:45,686 | Processing digen13_769 | Method: NCTD
+2026-04-23 14:04:47,005 | DONE: digen13_769 | Test Acc: 0.5950
+2026-04-23 14:04:47,006 | Processing digen14_769 | Method: NCTD
+2026-04-23 14:04:49,379 | DONE: digen14_769 | Test Acc: 0.5000
+2026-04-23 14:04:49,379 | Processing digen15_5311 | Method: NCTD
+2026-04-23 14:04:51,459 | DONE: digen15_5311 | Test Acc: 0.5650
+2026-04-23 14:04:51,460 | Processing digen16_5390 | Method: NCTD
+2026-04-23 14:04:53,425 | DONE: digen16_5390 | Test Acc: 0.5800
+2026-04-23 14:04:53,426 | Processing digen17_6949 | Method: NCTD
+2026-04-23 14:04:54,830 | DONE: digen17_6949 | Test Acc: 0.5450
+2026-04-23 14:04:54,831 | Processing digen18_5578 | Method: NCTD
+2026-04-23 14:04:56,244 | DONE: digen18_5578 | Test Acc: 0.5650
+2026-04-23 14:04:56,245 | Processing digen19_7270 | Method: NCTD
+2026-04-23 14:04:59,308 | DONE: digen19_7270 | Test Acc: 0.5900
+2026-04-23 14:04:59,308 | Processing digen1_6265 | Method: NCTD
+2026-04-23 14:05:01,524 | DONE: digen1_6265 | Test Acc: 0.6850
+2026-04-23 14:05:01,526 | Processing digen20_5191 | Method: NCTD
+2026-04-23 14:05:03,983 | DONE: digen20_5191 | Test Acc: 0.5650
+2026-04-23 14:05:03,984 | Processing digen21_6265 | Method: NCTD
+2026-04-23 14:05:06,175 | DONE: digen21_6265 | Test Acc: 0.5500
+2026-04-23 14:05:06,176 | Processing digen22_2433 | Method: NCTD
+2026-04-23 14:05:08,310 | DONE: digen22_2433 | Test Acc: 0.5850
+2026-04-23 14:05:08,311 | Processing digen23_5191 | Method: NCTD
+2026-04-23 14:05:10,568 | DONE: digen23_5191 | Test Acc: 0.5050
+2026-04-23 14:05:10,570 | Processing digen24_2433 | Method: NCTD
+2026-04-23 14:05:12,518 | DONE: digen24_2433 | Test Acc: 0.5650
+2026-04-23 14:05:12,519 | Processing digen25_2433 | Method: NCTD
+2026-04-23 14:05:16,319 | DONE: digen25_2433 | Test Acc: 0.5600
+2026-04-23 14:05:16,320 | Processing digen26_7270 | Method: NCTD
+2026-04-23 14:05:18,896 | DONE: digen26_7270 | Test Acc: 0.5500
+2026-04-23 14:05:18,897 | Processing digen27_860 | Method: NCTD
+2026-04-23 14:05:21,581 | DONE: digen27_860 | Test Acc: 0.4900
+2026-04-23 14:05:21,582 | Processing digen28_769 | Method: NCTD
+2026-04-23 14:05:23,062 | DONE: digen28_769 | Test Acc: 0.5150
+2026-04-23 14:05:23,063 | Processing digen29_8322 | Method: NCTD
+2026-04-23 14:05:24,806 | DONE: digen29_8322 | Test Acc: 0.4700
+2026-04-23 14:05:24,807 | Processing digen2_6949 | Method: NCTD
+2026-04-23 14:05:25,540 | DONE: digen2_6949 | Test Acc: 0.5000
+2026-04-23 14:05:25,541 | Processing digen30_4426 | Method: NCTD
+2026-04-23 14:05:26,439 | DONE: digen30_4426 | Test Acc: 0.5000
+2026-04-23 14:05:26,441 | Processing digen31_2433 | Method: NCTD
+2026-04-23 14:05:27,295 | DONE: digen31_2433 | Test Acc: 0.5000
+2026-04-23 14:05:27,296 | Processing digen32_5191 | Method: NCTD
+2026-04-23 14:05:28,560 | DONE: digen32_5191 | Test Acc: 0.4950
+2026-04-23 14:05:28,561 | Processing digen33_769 | Method: NCTD
+2026-04-23 14:05:30,896 | DONE: digen33_769 | Test Acc: 0.6400
+2026-04-23 14:05:30,896 | Processing digen34_769 | Method: NCTD
+2026-04-23 14:05:31,762 | DONE: digen34_769 | Test Acc: 0.5000
+2026-04-23 14:05:31,765 | Processing digen35_4426 | Method: NCTD
+2026-04-23 14:05:34,617 | DONE: digen35_4426 | Test Acc: 0.5450
+2026-04-23 14:05:34,618 | Processing digen36_466 | Method: NCTD
+2026-04-23 14:05:35,645 | DONE: digen36_466 | Test Acc: 0.5500
+2026-04-23 14:05:35,646 | Processing digen37_769 | Method: NCTD
+2026-04-23 14:05:37,704 | DONE: digen37_769 | Test Acc: 0.5650
+2026-04-23 14:05:37,705 | Processing digen38_4426 | Method: NCTD
+2026-04-23 14:05:39,117 | DONE: digen38_4426 | Test Acc: 0.5100
+2026-04-23 14:05:39,118 | Processing digen39_5578 | Method: NCTD
+2026-04-23 14:05:40,223 | DONE: digen39_5578 | Test Acc: 0.6050
+2026-04-23 14:05:40,224 | Processing digen3_769 | Method: NCTD
+2026-04-23 14:05:41,698 | DONE: digen3_769 | Test Acc: 0.5500
+2026-04-23 14:05:41,699 | Processing digen40_5390 | Method: NCTD
+2026-04-23 14:05:42,655 | DONE: digen40_5390 | Test Acc: 0.5000
+2026-04-23 14:05:42,655 | Processing digen4_860 | Method: NCTD
+2026-04-23 14:05:44,585 | DONE: digen4_860 | Test Acc: 0.5200
+2026-04-23 14:05:44,587 | Processing digen5_6949 | Method: NCTD
+2026-04-23 14:05:46,438 | DONE: digen5_6949 | Test Acc: 0.5550
+2026-04-23 14:05:46,439 | Processing digen6_466 | Method: NCTD
+2026-04-23 14:05:48,180 | DONE: digen6_466 | Test Acc: 0.5250
+2026-04-23 14:05:48,181 | Processing digen7_6949 | Method: NCTD
+2026-04-23 14:05:49,195 | DONE: digen7_6949 | Test Acc: 0.4400
+2026-04-23 14:05:49,196 | Processing digen8_4426 | Method: NCTD
+2026-04-23 14:05:52,765 | DONE: digen8_4426 | Test Acc: 0.5100
+2026-04-23 14:05:52,766 | Processing digen9_7270 | Method: NCTD
+2026-04-23 14:05:55,927 | DONE: digen9_7270 | Test Acc: 0.5950
+2026-04-23 14:05:55,938 | 
+============================================================
+FINAL TEST METRICS SUMMARY
+============================================================
+2026-04-23 14:05:55,938 | Dataset                             Method     Accuracy   MCC       
+2026-04-23 14:05:55,939 | ----------------------------------------------------------------------
+2026-04-23 14:05:55,939 | DS01_breast_cancer                  ours       0.6571     0.0000    
+2026-04-23 14:05:55,939 | DS02_student_dropout                ours       0.7582     0.5996    
+2026-04-23 14:05:55,939 | DS03_adult                          ours       0.5910     0.3350    
+2026-04-23 14:05:55,939 | DS04_heart                          ours       0.8424     0.6819    
+2026-04-23 14:05:55,939 | DS06_dengue_chikungunya             ours       0.6079     0.4142    
+2026-04-23 14:05:55,939 | DS07_ringnorm                       ours       0.9851     0.9704    
+2026-04-23 14:05:55,939 | 06_friedman1                        ours       0.8390     0.6781    
+2026-04-23 14:05:55,940 | 07_friedman2                        ours       0.8732     0.7475    
+2026-04-23 14:05:55,940 | 08_friedman3                        ours       0.7171     0.4350    
+2026-04-23 14:05:55,940 | 13_rotated_rastrigin_50d            ours       0.4000     -0.3333   
+2026-04-23 14:05:55,940 | digen10_8322                        ours       0.8100     0.6211    
+2026-04-23 14:05:55,940 | digen11_7270                        ours       0.6550     0.3261    
+2026-04-23 14:05:55,940 | digen12_8322                        ours       0.6350     0.2821    
+2026-04-23 14:05:55,940 | digen13_769                         ours       0.8250     0.6556    
+2026-04-23 14:05:55,940 | digen14_769                         ours       0.5700     0.1403    
+2026-04-23 14:05:55,940 | digen15_5311                        ours       0.7700     0.5490    
+2026-04-23 14:05:55,940 | digen16_5390                        ours       0.8200     0.6412    
+2026-04-23 14:05:55,941 | digen17_6949                        ours       0.6450     0.3149    
+2026-04-23 14:05:55,941 | digen18_5578                        ours       0.5800     0.1901    
+2026-04-23 14:05:55,941 | digen19_7270                        ours       0.8150     0.6315    
+2026-04-23 14:05:55,941 | digen1_6265                         ours       0.9150     0.8310    
+2026-04-23 14:05:55,941 | digen20_5191                        ours       0.7800     0.5656    
+2026-04-23 14:05:55,941 | digen21_6265                        ours       0.5850     0.1756    
+2026-04-23 14:05:55,941 | digen22_2433                        ours       0.5050     0.0109    
+2026-04-23 14:05:55,941 | digen23_5191                        ours       0.5050     0.0100    
+2026-04-23 14:05:55,941 | digen24_2433                        ours       0.5300     0.0643    
+2026-04-23 14:05:55,941 | digen25_2433                        ours       0.6250     0.2500    
+2026-04-23 14:05:55,942 | digen26_7270                        ours       0.6600     0.3695    
+2026-04-23 14:05:55,942 | digen27_860                         ours       0.5000     0.0000    
+2026-04-23 14:05:55,942 | digen28_769                         ours       0.5350     0.0723    
+2026-04-23 14:05:55,942 | digen29_8322                        ours       0.5600     0.1236    
+2026-04-23 14:05:55,942 | digen2_6949                         ours       0.5250     0.0509    
+2026-04-23 14:05:55,942 | digen30_4426                        ours       0.5750     0.1517    
+2026-04-23 14:05:55,942 | digen31_2433                        ours       0.8300     0.6605    
+2026-04-23 14:05:55,942 | digen32_5191                        ours       0.6750     0.3540    
+2026-04-23 14:05:55,942 | digen33_769                         ours       0.8750     0.7586    
+2026-04-23 14:05:55,943 | digen34_769                         ours       0.5100     0.0203    
+2026-04-23 14:05:55,943 | digen35_4426                        ours       0.5900     0.1864    
+2026-04-23 14:05:55,943 | digen36_466                         ours       0.7600     0.5357    
+2026-04-23 14:05:55,943 | digen37_769                         ours       0.8950     0.7900    
+2026-04-23 14:05:55,943 | digen38_4426                        ours       0.6200     0.2417    
+2026-04-23 14:05:55,944 | digen39_5578                        ours       0.8850     0.7766    
+2026-04-23 14:05:55,944 | digen3_769                          ours       0.9500     0.9016    
+2026-04-23 14:05:55,944 | digen40_5390                        ours       0.5250     0.0609    
+2026-04-23 14:05:55,944 | digen4_860                          ours       0.5050     0.0112    
+2026-04-23 14:05:55,944 | digen5_6949                         ours       0.7800     0.5693    
+2026-04-23 14:05:55,944 | digen6_466                          ours       0.5600     0.1200    
+2026-04-23 14:05:55,944 | digen7_6949                         ours       0.5800     0.1667    
+2026-04-23 14:05:55,945 | digen8_4426                         ours       0.5900     0.1875    
+2026-04-23 14:05:55,945 | digen9_7270                         ours       0.6700     0.3502    
+2026-04-23 14:05:55,945 | DS02_student_dropout                NCTD       0.7774     0.6306    
+2026-04-23 14:05:55,945 | DS07_ringnorm                       NCTD       0.9851     0.9703    
+2026-04-23 14:05:55,945 | 06_friedman1                        NCTD       0.6585     0.3171    
+2026-04-23 14:05:55,945 | 07_friedman2                        NCTD       0.8878     0.7766    
+2026-04-23 14:05:55,945 | 08_friedman3                        NCTD       0.4780     -0.0457   
+2026-04-23 14:05:55,945 | 13_rotated_rastrigin_50d            NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,945 | digen10_8322                        NCTD       0.5650     0.1491    
+2026-04-23 14:05:55,945 | digen11_7270                        NCTD       0.5700     0.1514    
+2026-04-23 14:05:55,946 | digen12_8322                        NCTD       0.4900     -0.0241   
+2026-04-23 14:05:55,946 | digen13_769                         NCTD       0.5950     0.1943    
+2026-04-23 14:05:55,946 | digen14_769                         NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,946 | digen15_5311                        NCTD       0.5650     0.1388    
+2026-04-23 14:05:55,946 | digen16_5390                        NCTD       0.5800     0.1677    
+2026-04-23 14:05:55,946 | digen17_6949                        NCTD       0.5450     0.0902    
+2026-04-23 14:05:55,946 | digen18_5578                        NCTD       0.5650     0.1311    
+2026-04-23 14:05:55,946 | digen19_7270                        NCTD       0.5900     0.1864    
+2026-04-23 14:05:55,946 | digen1_6265                         NCTD       0.6850     0.3802    
+2026-04-23 14:05:55,946 | digen20_5191                        NCTD       0.5650     0.1302    
+2026-04-23 14:05:55,947 | digen21_6265                        NCTD       0.5500     0.1171    
+2026-04-23 14:05:55,947 | digen22_2433                        NCTD       0.5850     0.1704    
+2026-04-23 14:05:55,947 | digen23_5191                        NCTD       0.5050     0.0102    
+2026-04-23 14:05:55,947 | digen24_2433                        NCTD       0.5650     0.1301    
+2026-04-23 14:05:55,947 | digen25_2433                        NCTD       0.5600     0.1220    
+2026-04-23 14:05:55,947 | digen26_7270                        NCTD       0.5500     0.1001    
+2026-04-23 14:05:55,947 | digen27_860                         NCTD       0.4900     -0.0297   
+2026-04-23 14:05:55,947 | digen28_769                         NCTD       0.5150     0.0306    
+2026-04-23 14:05:55,947 | digen29_8322                        NCTD       0.4700     -0.0625   
+2026-04-23 14:05:55,947 | digen2_6949                         NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,947 | digen30_4426                        NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,948 | digen31_2433                        NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,948 | digen32_5191                        NCTD       0.4950     -0.0108   
+2026-04-23 14:05:55,948 | digen33_769                         NCTD       0.6400     0.2820    
+2026-04-23 14:05:55,948 | digen34_769                         NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,948 | digen35_4426                        NCTD       0.5450     0.0925    
+2026-04-23 14:05:55,948 | digen36_466                         NCTD       0.5500     0.1188    
+2026-04-23 14:05:55,948 | digen37_769                         NCTD       0.5650     0.1300    
+2026-04-23 14:05:55,948 | digen38_4426                        NCTD       0.5100     0.0421    
+2026-04-23 14:05:55,948 | digen39_5578                        NCTD       0.6050     0.2124    
+2026-04-23 14:05:55,948 | digen3_769                          NCTD       0.5500     0.1081    
+2026-04-23 14:05:55,949 | digen40_5390                        NCTD       0.5000     0.0000    
+2026-04-23 14:05:55,949 | digen4_860                          NCTD       0.5200     0.0412    
+2026-04-23 14:05:55,949 | digen5_6949                         NCTD       0.5550     0.1120    
+2026-04-23 14:05:55,949 | digen6_466                          NCTD       0.5250     0.0503    
+2026-04-23 14:05:55,949 | digen7_6949                         NCTD       0.4400     -0.1276   
+2026-04-23 14:05:55,949 | digen8_4426                         NCTD       0.5100     0.0201    
+2026-04-23 14:05:55,949 | digen9_7270                         NCTD       0.5950     0.1916    
+2026-04-23 14:05:55,949 | ============================================================
+2026-04-23 14:05:55,949 | All training completed. Consolidated results at: final_best_run\consolidated_test_metrics.json

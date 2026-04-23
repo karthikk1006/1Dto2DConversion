@@ -18,10 +18,11 @@ from train_pipeline import (
     load_2d_datasets,
     Tabular2ImageDataset,
     evaluate_model,
-    nctd_transform,
     DEVICE,
     _USE_AMP,
+    safe_stratified_split,
 )
+
 
 def log_gpu_usage(logger: logging.Logger, tag: str = ""):
     """Explicitly log GPU usage at INFO level."""
@@ -272,8 +273,9 @@ def main():
                 num_samples = int(len(y))
                 
                 # Split 70/10/20
-                train_idx, test_idx = train_test_split(range(num_samples), test_size=0.2, stratify=y.cpu().numpy(), random_state=42)
-                train_idx, val_idx = train_test_split(train_idx, test_size=0.125, stratify=y[train_idx].cpu().numpy(), random_state=42)
+                train_idx, test_idx = safe_stratified_split(range(num_samples), y, test_size=0.2, random_state=42)
+                train_idx, val_idx = safe_stratified_split(train_idx, y[train_idx], test_size=0.125, random_state=42)
+
                 
                 train_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=train_idx)
                 val_ds = Tabular2ImageDataset(X, y, "nctd_cnn", nctd_transform, indices=val_idx)

@@ -81,7 +81,9 @@ from train_pipeline import (
     efficientnet_val_transform,
     nctd_transform,
     _master_logger,
+    safe_stratified_split,
 )
+
 
 # Suppress PyTorch lr_scheduler.step() warning about calling order
 # (The warning is a false positive in our case as we call it correctly)
@@ -360,14 +362,13 @@ def create_objective(
             
             # Stratified splits: 70% train / 10% val / 20% test
             num_samples = len(y_cpu)
-            train_idx, test_idx = train_test_split(
-                range(num_samples), test_size=0.2,
-                stratify=y_cpu.cpu().numpy(), random_state=42,
+            train_idx, test_idx = safe_stratified_split(
+                range(num_samples), y_cpu, test_size=0.2, random_state=42
             )
-            train_idx, val_idx = train_test_split(
-                train_idx, test_size=0.125,
-                stratify=y_cpu[train_idx].cpu().numpy(), random_state=42,
+            train_idx, val_idx = safe_stratified_split(
+                train_idx, y_cpu[train_idx], test_size=0.125, random_state=42
             )
+
             
             # Data transforms
             train_tf = (
