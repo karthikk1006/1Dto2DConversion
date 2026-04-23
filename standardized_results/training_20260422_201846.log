@@ -1,0 +1,81 @@
+2026-04-22 20:18:46,838 | INFO     | Starting standardized training for method: OURS (6 datasets)
+2026-04-22 20:18:46,839 | INFO     | Processing: DS01_breast_cancer
+2026-04-22 20:18:47,045 | INFO     |   [GPU] Before Training - Allocated: 0MB, Reserved: 2MB
+2026-04-22 20:18:47,448 | WARNING  |   [DIVERGENCE] NaN loss detected at epoch 1. Stopping training for DS01_breast_cancer.
+2026-04-22 20:18:47,651 | WARNING  | Non-finite logits detected (280 values). Model may have diverged. Replacing with zeros for safe metric computation.
+2026-04-22 20:18:47,666 | INFO     | Done: DS01_breast_cancer | Acc: 0.6571 | MCC: 0.0000
+2026-04-22 20:18:47,666 | INFO     | Processing: DS02_student_dropout
+2026-04-22 20:18:47,741 | INFO     |   [GPU] Before Training - Allocated: 10MB, Reserved: 22MB
+2026-04-22 20:19:29,845 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 44MB
+2026-04-22 20:20:02,320 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 44MB
+2026-04-22 20:20:35,762 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 44MB
+2026-04-22 20:21:08,375 | INFO     |   [GPU] Epoch 40 - Allocated: 19MB, Reserved: 44MB
+2026-04-22 20:21:08,376 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 44MB
+2026-04-22 20:21:09,151 | INFO     | Done: DS02_student_dropout | Acc: 0.7480 | MCC: 0.5808
+2026-04-22 20:21:09,151 | INFO     | Processing: DS03_adult
+2026-04-22 20:21:09,686 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:26:03,163 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 48MB
+2026-04-22 20:30:46,939 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-22 20:32:39,893 | INFO     | Early stopping at epoch 24
+2026-04-22 20:32:39,896 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-22 20:32:45,493 | INFO     | Done: DS03_adult | Acc: 0.5880 | MCC: 0.3260
+2026-04-22 20:32:45,493 | INFO     | Processing: DS04_heart
+2026-04-22 20:32:45,519 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:32:55,371 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-22 20:32:59,790 | INFO     | Early stopping at epoch 19
+2026-04-22 20:32:59,791 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-22 20:32:59,981 | INFO     | Done: DS04_heart | Acc: 0.8315 | MCC: 0.6586
+2026-04-22 20:32:59,981 | INFO     | Processing: DS06_dengue_chikungunya
+2026-04-22 20:33:00,191 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:35:06,670 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 54MB
+2026-04-22 20:36:18,095 | INFO     | Early stopping at epoch 16
+2026-04-22 20:36:18,096 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 54MB
+2026-04-22 20:36:20,441 | INFO     | Done: DS06_dengue_chikungunya | Acc: 0.5921 | MCC: 0.3951
+2026-04-22 20:36:20,441 | INFO     | Processing: DS07_ringnorm
+2026-04-22 20:36:21,886 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:37:15,879 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 50MB
+2026-04-22 20:38:01,675 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 50MB
+2026-04-22 20:38:29,060 | INFO     | Early stopping at epoch 26
+2026-04-22 20:38:29,061 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 50MB
+2026-04-22 20:38:30,029 | INFO     | Done: DS07_ringnorm | Acc: 0.9818 | MCC: 0.9637
+2026-04-22 20:38:30,031 | INFO     | Starting standardized training for method: NCTD (6 datasets)
+2026-04-22 20:38:30,031 | INFO     | Processing: DS01_breast_cancer
+2026-04-22 20:38:30,220 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:38:30,290 | WARNING  |   [DIVERGENCE] NaN loss detected at epoch 1. Stopping training for DS01_breast_cancer.
+2026-04-22 20:38:30,531 | WARNING  | Non-finite logits detected (280 values). Model may have diverged. Replacing with zeros for safe metric computation.
+2026-04-22 20:38:30,546 | INFO     | Done: DS01_breast_cancer | Acc: 0.6571 | MCC: 0.0000
+2026-04-22 20:38:30,546 | INFO     | Processing: DS02_student_dropout
+2026-04-22 20:38:31,419 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:39:57,123 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 334MB
+2026-04-22 20:41:13,625 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 334MB
+2026-04-22 20:41:44,322 | INFO     | Early stopping at epoch 24
+2026-04-22 20:41:44,323 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 334MB
+2026-04-22 20:41:46,201 | INFO     | Done: DS02_student_dropout | Acc: 0.7684 | MCC: 0.6161
+2026-04-22 20:41:46,202 | INFO     | Processing: DS03_adult
+2026-04-22 20:41:52,884 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:49:03,466 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 64MB
+2026-04-22 20:56:05,606 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 64MB
+2026-04-22 20:56:47,207 | INFO     | Early stopping at epoch 21
+2026-04-22 20:56:47,208 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 64MB
+2026-04-22 20:56:57,784 | INFO     | Done: DS03_adult | Acc: 0.5836 | MCC: 0.3209
+2026-04-22 20:56:57,784 | INFO     | Processing: DS04_heart
+2026-04-22 20:56:57,975 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 20:57:13,939 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-22 20:57:20,562 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-22 20:57:21,118 | INFO     | Early stopping at epoch 21
+2026-04-22 20:57:21,119 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-22 20:57:21,358 | INFO     | Done: DS04_heart | Acc: 0.8315 | MCC: 0.6580
+2026-04-22 20:57:21,358 | INFO     | Processing: DS06_dengue_chikungunya
+2026-04-22 20:57:24,512 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 21:00:43,675 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 206MB
+2026-04-22 21:03:53,073 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 206MB
+2026-04-22 21:07:04,554 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 206MB
+2026-04-22 21:08:57,536 | INFO     | Early stopping at epoch 36
+2026-04-22 21:08:57,540 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 206MB
+2026-04-22 21:09:01,577 | INFO     | Done: DS06_dengue_chikungunya | Acc: 0.6015 | MCC: 0.4059
+2026-04-22 21:09:01,578 | INFO     | Processing: DS07_ringnorm
+2026-04-22 21:09:03,003 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-22 21:10:17,800 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 122MB
+2026-04-22 21:11:11,067 | INFO     | Early stopping at epoch 18
+2026-04-22 21:11:11,068 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 122MB
+2026-04-22 21:11:12,525 | INFO     | Done: DS07_ringnorm | Acc: 0.9851 | MCC: 0.9703

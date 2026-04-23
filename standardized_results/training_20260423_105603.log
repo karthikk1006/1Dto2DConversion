@@ -1,0 +1,683 @@
+2026-04-23 10:56:03,617 | INFO     | Starting standardized training for method: OURS (50 datasets)
+2026-04-23 10:56:03,617 | INFO     | Processing: DS01_breast_cancer
+2026-04-23 10:56:03,806 | INFO     |   [GPU] Before Training - Allocated: 0MB, Reserved: 2MB
+2026-04-23 10:56:04,172 | WARNING  |   [DIVERGENCE] NaN loss detected at epoch 1. Stopping training for DS01_breast_cancer.
+2026-04-23 10:56:04,378 | WARNING  | Non-finite logits detected (280 values). Model may have diverged. Replacing with zeros for safe metric computation.
+2026-04-23 10:56:04,412 | INFO     | Done: DS01_breast_cancer | Acc: 0.6571 | MCC: 0.0000
+2026-04-23 10:56:04,413 | INFO     | Processing: DS02_student_dropout
+2026-04-23 10:56:04,493 | INFO     |   [GPU] Before Training - Allocated: 10MB, Reserved: 22MB
+2026-04-23 10:56:46,957 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 44MB
+2026-04-23 10:57:19,270 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 44MB
+2026-04-23 10:57:50,700 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 44MB
+2026-04-23 10:58:22,590 | INFO     | Early stopping at epoch 40
+2026-04-23 10:58:22,591 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 10:58:23,399 | INFO     | Done: DS02_student_dropout | Acc: 0.7514 | MCC: 0.5867
+2026-04-23 10:58:23,400 | INFO     | Processing: DS03_adult
+2026-04-23 10:58:23,970 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:03:18,117 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:07:06,888 | INFO     | Early stopping at epoch 18
+2026-04-23 11:07:06,892 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:07:12,672 | INFO     | Done: DS03_adult | Acc: 0.5818 | MCC: 0.3130
+2026-04-23 11:07:12,673 | INFO     | Processing: DS04_heart
+2026-04-23 11:07:12,697 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:07:24,182 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:07:29,293 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:07:30,388 | INFO     | Early stopping at epoch 22
+2026-04-23 11:07:30,389 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:07:30,577 | INFO     | Done: DS04_heart | Acc: 0.8370 | MCC: 0.6691
+2026-04-23 11:07:30,577 | INFO     | Processing: DS06_dengue_chikungunya
+2026-04-23 11:07:30,803 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:09:38,605 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 54MB
+2026-04-23 11:11:39,787 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 54MB
+2026-04-23 11:12:40,182 | INFO     | Early stopping at epoch 25
+2026-04-23 11:12:40,183 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 54MB
+2026-04-23 11:12:42,507 | INFO     | Done: DS06_dengue_chikungunya | Acc: 0.6055 | MCC: 0.4122
+2026-04-23 11:12:42,508 | INFO     | Processing: DS07_ringnorm
+2026-04-23 11:12:42,619 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:13:36,136 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 50MB
+2026-04-23 11:14:22,175 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 50MB
+2026-04-23 11:14:49,901 | INFO     | Early stopping at epoch 26
+2026-04-23 11:14:49,902 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 50MB
+2026-04-23 11:14:50,908 | INFO     | Done: DS07_ringnorm | Acc: 0.9845 | MCC: 0.9691
+2026-04-23 11:14:50,908 | INFO     | Processing: 06_friedman1
+2026-04-23 11:14:50,959 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:14:58,104 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:14:59,948 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:15:01,663 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:15:02,154 | INFO     | Early stopping at epoch 33
+2026-04-23 11:15:02,155 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:15:02,254 | INFO     | Done: 06_friedman1 | Acc: 0.8341 | MCC: 0.6693
+2026-04-23 11:15:02,254 | INFO     | Processing: 07_friedman2
+2026-04-23 11:15:02,287 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:15:07,802 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:09,672 | INFO     | Early stopping at epoch 20
+2026-04-23 11:15:09,673 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:09,813 | INFO     | Done: 07_friedman2 | Acc: 0.8829 | MCC: 0.7694
+2026-04-23 11:15:09,813 | INFO     | Processing: 08_friedman3
+2026-04-23 11:15:09,842 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:15:11,700 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:13,319 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:13,848 | INFO     | Early stopping at epoch 23
+2026-04-23 11:15:13,849 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:13,929 | INFO     | Done: 08_friedman3 | Acc: 0.7024 | MCC: 0.4049
+2026-04-23 11:15:13,929 | INFO     | Processing: 13_rotated_rastrigin_50d
+2026-04-23 11:15:13,992 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:15:23,275 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 68MB
+2026-04-23 11:15:23,440 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 68MB
+2026-04-23 11:15:23,470 | INFO     | Early stopping at epoch 22
+2026-04-23 11:15:23,471 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 68MB
+2026-04-23 11:15:23,539 | INFO     | Done: 13_rotated_rastrigin_50d | Acc: 0.6000 | MCC: 0.3333
+2026-04-23 11:15:23,539 | INFO     | Processing: digen10_8322
+2026-04-23 11:15:23,588 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:15:28,929 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:30,618 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:31,307 | INFO     | Early stopping at epoch 24
+2026-04-23 11:15:31,308 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:31,395 | INFO     | Done: digen10_8322 | Acc: 0.6150 | MCC: 0.2476
+2026-04-23 11:15:31,395 | INFO     | Processing: digen11_7270
+2026-04-23 11:15:31,438 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:15:33,056 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:34,720 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:36,633 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:37,176 | INFO     | Early stopping at epoch 33
+2026-04-23 11:15:37,177 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:37,225 | INFO     | Done: digen11_7270 | Acc: 0.6800 | MCC: 0.3603
+2026-04-23 11:15:37,225 | INFO     | Processing: digen12_8322
+2026-04-23 11:15:37,254 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:15:38,887 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:39,952 | INFO     | Early stopping at epoch 17
+2026-04-23 11:15:39,953 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:39,998 | INFO     | Done: digen12_8322 | Acc: 0.4900 | MCC: -0.0200
+2026-04-23 11:15:39,999 | INFO     | Processing: digen13_769
+2026-04-23 11:15:40,035 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:15:41,795 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:43,338 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:44,591 | INFO     | Early stopping at epoch 27
+2026-04-23 11:15:44,592 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:44,664 | INFO     | Done: digen13_769 | Acc: 0.7250 | MCC: 0.4527
+2026-04-23 11:15:44,664 | INFO     | Processing: digen14_769
+2026-04-23 11:15:44,686 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:15:46,416 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 11:15:48,052 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:48,932 | INFO     | Early stopping at epoch 25
+2026-04-23 11:15:48,933 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:15:48,980 | INFO     | Done: digen14_769 | Acc: 0.4800 | MCC: -0.0412
+2026-04-23 11:15:48,980 | INFO     | Processing: digen15_5311
+2026-04-23 11:15:49,024 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:15:50,846 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:52,494 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:54,242 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:55,817 | INFO     |   [GPU] Epoch 40 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:55,818 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:15:55,866 | INFO     | Done: digen15_5311 | Acc: 0.7400 | MCC: 0.4824
+2026-04-23 11:15:55,866 | INFO     | Processing: digen16_5390
+2026-04-23 11:15:55,888 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:15:57,493 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:15:59,136 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:00,746 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:02,409 | INFO     | Early stopping at epoch 40
+2026-04-23 11:16:02,410 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:02,464 | INFO     | Done: digen16_5390 | Acc: 0.7350 | MCC: 0.4754
+2026-04-23 11:16:02,464 | INFO     | Processing: digen17_6949
+2026-04-23 11:16:02,502 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:04,133 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:04,434 | INFO     | Early stopping at epoch 12
+2026-04-23 11:16:04,435 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:04,498 | INFO     | Done: digen17_6949 | Acc: 0.4850 | MCC: -0.0608
+2026-04-23 11:16:04,498 | INFO     | Processing: digen18_5578
+2026-04-23 11:16:04,521 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:06,192 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:07,848 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:08,565 | INFO     | Early stopping at epoch 24
+2026-04-23 11:16:08,566 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:08,614 | INFO     | Done: digen18_5578 | Acc: 0.5100 | MCC: 0.0200
+2026-04-23 11:16:08,614 | INFO     | Processing: digen19_7270
+2026-04-23 11:16:08,649 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:16:10,301 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:12,012 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:13,660 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:15,348 | INFO     |   [GPU] Epoch 40 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:15,349 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:15,426 | INFO     | Done: digen19_7270 | Acc: 0.6700 | MCC: 0.3403
+2026-04-23 11:16:15,427 | INFO     | Processing: digen1_6265
+2026-04-23 11:16:15,456 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:17,137 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:18,895 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:20,543 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:20,852 | INFO     | Early stopping at epoch 32
+2026-04-23 11:16:20,853 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:20,902 | INFO     | Done: digen1_6265 | Acc: 0.9000 | MCC: 0.8014
+2026-04-23 11:16:20,902 | INFO     | Processing: digen20_5191
+2026-04-23 11:16:20,951 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:22,627 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:24,249 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:25,825 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:27,201 | INFO     | Early stopping at epoch 38
+2026-04-23 11:16:27,201 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:27,267 | INFO     | Done: digen20_5191 | Acc: 0.6400 | MCC: 0.2955
+2026-04-23 11:16:27,267 | INFO     | Processing: digen21_6265
+2026-04-23 11:16:27,303 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:16:28,905 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:30,111 | INFO     | Early stopping at epoch 17
+2026-04-23 11:16:30,112 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:16:30,181 | INFO     | Done: digen21_6265 | Acc: 0.5000 | MCC: 0.0000
+2026-04-23 11:16:30,181 | INFO     | Processing: digen22_2433
+2026-04-23 11:16:30,218 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:31,910 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:33,550 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:35,258 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:36,884 | INFO     |   [GPU] Epoch 40 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:36,885 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:36,958 | INFO     | Done: digen22_2433 | Acc: 0.7400 | MCC: 0.4815
+2026-04-23 11:16:36,959 | INFO     | Processing: digen23_5191
+2026-04-23 11:16:36,980 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:38,616 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:38,770 | INFO     | Early stopping at epoch 11
+2026-04-23 11:16:38,771 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:38,817 | INFO     | Done: digen23_5191 | Acc: 0.5050 | MCC: 0.0709
+2026-04-23 11:16:38,817 | INFO     | Processing: digen24_2433
+2026-04-23 11:16:38,838 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:16:40,488 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:42,241 | INFO     | Early stopping at epoch 20
+2026-04-23 11:16:42,242 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:16:42,287 | INFO     | Done: digen24_2433 | Acc: 0.5800 | MCC: 0.1621
+2026-04-23 11:16:42,287 | INFO     | Processing: digen25_2433
+2026-04-23 11:16:42,310 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:43,936 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:45,532 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:47,166 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:48,002 | INFO     | Early stopping at epoch 35
+2026-04-23 11:16:48,003 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:48,050 | INFO     | Done: digen25_2433 | Acc: 0.5400 | MCC: 0.0816
+2026-04-23 11:16:48,051 | INFO     | Processing: digen26_7270
+2026-04-23 11:16:48,072 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:49,764 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:51,357 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:51,865 | INFO     | Early stopping at epoch 23
+2026-04-23 11:16:51,866 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:16:51,930 | INFO     | Done: digen26_7270 | Acc: 0.5500 | MCC: 0.1007
+2026-04-23 11:16:51,930 | INFO     | Processing: digen27_860
+2026-04-23 11:16:51,968 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:16:53,662 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:54,440 | INFO     | Early stopping at epoch 15
+2026-04-23 11:16:54,441 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:16:54,497 | INFO     | Done: digen27_860 | Acc: 0.4850 | MCC: -0.0336
+2026-04-23 11:16:54,497 | INFO     | Processing: digen28_769
+2026-04-23 11:16:54,563 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:16:56,242 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:57,887 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:16:59,603 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:00,707 | INFO     | Early stopping at epoch 37
+2026-04-23 11:17:00,708 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:00,790 | INFO     | Done: digen28_769 | Acc: 0.5800 | MCC: 0.1603
+2026-04-23 11:17:00,790 | INFO     | Processing: digen29_8322
+2026-04-23 11:17:00,814 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:17:02,373 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:04,059 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:05,219 | INFO     | Early stopping at epoch 27
+2026-04-23 11:17:05,220 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:05,280 | INFO     | Done: digen29_8322 | Acc: 0.5750 | MCC: 0.1500
+2026-04-23 11:17:05,280 | INFO     | Processing: digen2_6949
+2026-04-23 11:17:05,308 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:07,010 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:08,602 | INFO     | Early stopping at epoch 20
+2026-04-23 11:17:08,603 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:08,671 | INFO     | Done: digen2_6949 | Acc: 0.5700 | MCC: 0.1429
+2026-04-23 11:17:08,671 | INFO     | Processing: digen30_4426
+2026-04-23 11:17:08,694 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:17:10,386 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:10,533 | INFO     | Early stopping at epoch 11
+2026-04-23 11:17:10,534 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:10,585 | INFO     | Done: digen30_4426 | Acc: 0.4950 | MCC: -0.0320
+2026-04-23 11:17:10,585 | INFO     | Processing: digen31_2433
+2026-04-23 11:17:10,626 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:17:12,270 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:13,917 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:15,544 | INFO     | Early stopping at epoch 30
+2026-04-23 11:17:15,545 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:15,591 | INFO     | Done: digen31_2433 | Acc: 0.6450 | MCC: 0.2933
+2026-04-23 11:17:15,591 | INFO     | Processing: digen32_5191
+2026-04-23 11:17:15,637 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:17,243 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:18,320 | INFO     | Early stopping at epoch 17
+2026-04-23 11:17:18,321 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:18,394 | INFO     | Done: digen32_5191 | Acc: 0.5500 | MCC: 0.1001
+2026-04-23 11:17:18,395 | INFO     | Processing: digen33_769
+2026-04-23 11:17:18,421 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:20,062 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 11:17:21,687 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:22,610 | INFO     | Early stopping at epoch 26
+2026-04-23 11:17:22,611 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:22,681 | INFO     | Done: digen33_769 | Acc: 0.7300 | MCC: 0.4623
+2026-04-23 11:17:22,681 | INFO     | Processing: digen34_769
+2026-04-23 11:17:22,708 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:17:24,336 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:25,993 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:27,643 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:28,520 | INFO     | Early stopping at epoch 35
+2026-04-23 11:17:28,521 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:28,595 | INFO     | Done: digen34_769 | Acc: 0.5350 | MCC: 0.0742
+2026-04-23 11:17:28,595 | INFO     | Processing: digen35_4426
+2026-04-23 11:17:28,638 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:30,282 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:31,863 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:32,461 | INFO     | Early stopping at epoch 24
+2026-04-23 11:17:32,462 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:32,509 | INFO     | Done: digen35_4426 | Acc: 0.5400 | MCC: 0.0810
+2026-04-23 11:17:32,509 | INFO     | Processing: digen36_466
+2026-04-23 11:17:32,550 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:34,166 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 11:17:34,983 | INFO     | Early stopping at epoch 15
+2026-04-23 11:17:34,984 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:35,041 | INFO     | Done: digen36_466 | Acc: 0.5850 | MCC: 0.1904
+2026-04-23 11:17:35,041 | INFO     | Processing: digen37_769
+2026-04-23 11:17:35,066 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:17:36,882 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:38,474 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:40,086 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:41,745 | INFO     | Early stopping at epoch 40
+2026-04-23 11:17:41,746 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:17:41,845 | INFO     | Done: digen37_769 | Acc: 0.7450 | MCC: 0.4906
+2026-04-23 11:17:41,845 | INFO     | Processing: digen38_4426
+2026-04-23 11:17:41,888 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:17:43,493 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:45,111 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:45,448 | INFO     | Early stopping at epoch 22
+2026-04-23 11:17:45,449 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:45,502 | INFO     | Done: digen38_4426 | Acc: 0.5900 | MCC: 0.1809
+2026-04-23 11:17:45,502 | INFO     | Processing: digen39_5578
+2026-04-23 11:17:45,532 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:47,198 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:48,811 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:50,493 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:52,192 | INFO     |   [GPU] Epoch 40 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:52,193 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:17:52,270 | INFO     | Done: digen39_5578 | Acc: 0.7800 | MCC: 0.5618
+2026-04-23 11:17:52,270 | INFO     | Processing: digen3_769
+2026-04-23 11:17:52,292 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:17:54,029 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:55,768 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:57,073 | INFO     | Early stopping at epoch 28
+2026-04-23 11:17:57,074 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:17:57,125 | INFO     | Done: digen3_769 | Acc: 0.9500 | MCC: 0.9000
+2026-04-23 11:17:57,126 | INFO     | Processing: digen40_5390
+2026-04-23 11:17:57,157 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:17:58,805 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:59,640 | INFO     | Early stopping at epoch 15
+2026-04-23 11:17:59,641 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:17:59,688 | INFO     | Done: digen40_5390 | Acc: 0.5200 | MCC: 0.0405
+2026-04-23 11:17:59,688 | INFO     | Processing: digen4_860
+2026-04-23 11:17:59,712 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:18:01,500 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:18:03,158 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:18:04,416 | INFO     | Early stopping at epoch 28
+2026-04-23 11:18:04,417 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 48MB
+2026-04-23 11:18:04,470 | INFO     | Done: digen4_860 | Acc: 0.5150 | MCC: 0.0365
+2026-04-23 11:18:04,470 | INFO     | Processing: digen5_6949
+2026-04-23 11:18:04,493 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:18:06,203 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:18:06,548 | INFO     | Early stopping at epoch 12
+2026-04-23 11:18:06,549 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:18:06,627 | INFO     | Done: digen5_6949 | Acc: 0.5550 | MCC: 0.1107
+2026-04-23 11:18:06,627 | INFO     | Processing: digen6_466
+2026-04-23 11:18:06,685 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:18:08,281 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:09,717 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:10,808 | INFO     | Early stopping at epoch 27
+2026-04-23 11:18:10,808 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:10,855 | INFO     | Done: digen6_466 | Acc: 0.5700 | MCC: 0.1528
+2026-04-23 11:18:10,855 | INFO     | Processing: digen7_6949
+2026-04-23 11:18:10,876 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:18:12,415 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 11:18:13,955 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 11:18:14,917 | INFO     | Early stopping at epoch 26
+2026-04-23 11:18:14,918 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:14,972 | INFO     | Done: digen7_6949 | Acc: 0.5100 | MCC: 0.0200
+2026-04-23 11:18:14,972 | INFO     | Processing: digen8_4426
+2026-04-23 11:18:14,995 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:18:16,629 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:18:18,268 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:18:19,514 | INFO     | Early stopping at epoch 28
+2026-04-23 11:18:19,515 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 11:18:19,621 | INFO     | Done: digen8_4426 | Acc: 0.5550 | MCC: 0.1206
+2026-04-23 11:18:19,621 | INFO     | Processing: digen9_7270
+2026-04-23 11:18:19,653 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 11:18:21,410 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:23,151 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:24,823 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:25,304 | INFO     | Early stopping at epoch 33
+2026-04-23 11:18:25,305 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 11:18:25,388 | INFO     | Done: digen9_7270 | Acc: 0.6000 | MCC: 0.2097
+2026-04-23 11:18:25,389 | INFO     | Starting standardized training for method: NCTD (50 datasets)
+2026-04-23 11:18:25,390 | INFO     | Processing: DS01_breast_cancer
+2026-04-23 11:18:25,408 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:18:25,456 | WARNING  |   [DIVERGENCE] NaN loss detected at epoch 1. Stopping training for DS01_breast_cancer.
+2026-04-23 11:18:25,622 | WARNING  | Non-finite logits detected (280 values). Model may have diverged. Replacing with zeros for safe metric computation.
+2026-04-23 11:18:25,635 | INFO     | Done: DS01_breast_cancer | Acc: 0.6571 | MCC: 0.0000
+2026-04-23 11:18:25,636 | INFO     | Processing: DS02_student_dropout
+2026-04-23 11:18:25,751 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 11:19:52,838 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 334MB
+2026-04-23 11:21:09,447 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 334MB
+2026-04-23 11:22:27,045 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 334MB
+2026-04-23 11:22:57,842 | INFO     | Early stopping at epoch 34
+2026-04-23 11:22:57,843 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 334MB
+2026-04-23 11:22:59,634 | INFO     | Done: DS02_student_dropout | Acc: 0.7763 | MCC: 0.6293
+2026-04-23 11:22:59,634 | INFO     | Processing: DS03_adult
+2026-04-23 11:23:06,698 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:30:17,489 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 64MB
+2026-04-23 11:37:18,000 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 64MB
+2026-04-23 11:44:18,893 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 64MB
+2026-04-23 11:51:19,440 | INFO     |   [GPU] Epoch 40 - Allocated: 19MB, Reserved: 64MB
+2026-04-23 11:51:19,442 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 64MB
+2026-04-23 11:51:28,842 | INFO     | Done: DS03_adult | Acc: 0.5889 | MCC: 0.3282
+2026-04-23 11:51:28,842 | INFO     | Processing: DS04_heart
+2026-04-23 11:51:29,043 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:51:44,640 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:51:51,094 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:51:57,528 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:51:59,601 | INFO     | Early stopping at epoch 33
+2026-04-23 11:51:59,602 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 11:51:59,846 | INFO     | Done: DS04_heart | Acc: 0.8152 | MCC: 0.6260
+2026-04-23 11:51:59,846 | INFO     | Processing: DS06_dengue_chikungunya
+2026-04-23 11:52:02,414 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 11:55:23,224 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 206MB
+2026-04-23 11:58:32,997 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 206MB
+2026-04-23 12:01:45,729 | INFO     | Early stopping at epoch 30
+2026-04-23 12:01:45,730 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 206MB
+2026-04-23 12:01:49,896 | INFO     | Done: DS06_dengue_chikungunya | Acc: 0.5974 | MCC: 0.4000
+2026-04-23 12:01:49,896 | INFO     | Processing: DS07_ringnorm
+2026-04-23 12:01:51,320 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:03:08,416 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 122MB
+2026-04-23 12:03:21,962 | INFO     | Early stopping at epoch 12
+2026-04-23 12:03:21,963 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 122MB
+2026-04-23 12:03:23,491 | INFO     | Done: DS07_ringnorm | Acc: 0.9858 | MCC: 0.9716
+2026-04-23 12:03:23,491 | INFO     | Processing: 06_friedman1
+2026-04-23 12:03:23,546 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:03:34,084 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 50MB
+2026-04-23 12:03:34,422 | INFO     | Early stopping at epoch 12
+2026-04-23 12:03:34,423 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 50MB
+2026-04-23 12:03:34,504 | INFO     | Done: 06_friedman1 | Acc: 0.6390 | MCC: 0.2782
+2026-04-23 12:03:34,504 | INFO     | Processing: 07_friedman2
+2026-04-23 12:03:34,526 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:03:41,552 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:03:43,360 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:03:43,685 | INFO     | Early stopping at epoch 22
+2026-04-23 12:03:43,686 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:03:43,768 | INFO     | Done: 07_friedman2 | Acc: 0.8732 | MCC: 0.7469
+2026-04-23 12:03:43,768 | INFO     | Processing: 08_friedman3
+2026-04-23 12:03:43,795 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:03:45,549 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 52MB
+2026-04-23 12:03:46,199 | INFO     | Early stopping at epoch 14
+2026-04-23 12:03:46,200 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 52MB
+2026-04-23 12:03:46,271 | INFO     | Done: 08_friedman3 | Acc: 0.5659 | MCC: 0.1316
+2026-04-23 12:03:46,271 | INFO     | Processing: 13_rotated_rastrigin_50d
+2026-04-23 12:03:46,368 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:03:56,570 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 544MB
+2026-04-23 12:03:56,603 | INFO     | Early stopping at epoch 11
+2026-04-23 12:03:56,604 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 544MB
+2026-04-23 12:03:56,688 | INFO     | Done: 13_rotated_rastrigin_50d | Acc: 0.5000 | MCC: 0.0000
+2026-04-23 12:03:56,689 | INFO     | Processing: digen10_8322
+2026-04-23 12:03:56,722 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:04:03,905 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:04,777 | INFO     | Early stopping at epoch 16
+2026-04-23 12:04:04,778 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:04,844 | INFO     | Done: digen10_8322 | Acc: 0.5250 | MCC: 0.0501
+2026-04-23 12:04:04,844 | INFO     | Processing: digen11_7270
+2026-04-23 12:04:04,916 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:06,418 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:07,229 | INFO     | Early stopping at epoch 15
+2026-04-23 12:04:07,230 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:07,279 | INFO     | Done: digen11_7270 | Acc: 0.5550 | MCC: 0.1101
+2026-04-23 12:04:07,279 | INFO     | Processing: digen12_8322
+2026-04-23 12:04:07,308 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:08,792 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:04:10,346 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:04:11,561 | INFO     | Early stopping at epoch 28
+2026-04-23 12:04:11,562 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:04:11,611 | INFO     | Done: digen12_8322 | Acc: 0.5050 | MCC: 0.0100
+2026-04-23 12:04:11,611 | INFO     | Processing: digen13_769
+2026-04-23 12:04:11,635 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 12:04:13,189 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:14,350 | INFO     | Early stopping at epoch 18
+2026-04-23 12:04:14,351 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:14,400 | INFO     | Done: digen13_769 | Acc: 0.6500 | MCC: 0.3107
+2026-04-23 12:04:14,400 | INFO     | Processing: digen14_769
+2026-04-23 12:04:14,429 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:15,930 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:17,482 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:18,993 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:20,517 | INFO     |   [GPU] Epoch 40 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:20,518 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:20,568 | INFO     | Done: digen14_769 | Acc: 0.5050 | MCC: 0.0100
+2026-04-23 12:04:20,568 | INFO     | Processing: digen15_5311
+2026-04-23 12:04:20,596 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 12:04:22,140 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:22,740 | INFO     | Early stopping at epoch 14
+2026-04-23 12:04:22,741 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:22,789 | INFO     | Done: digen15_5311 | Acc: 0.5650 | MCC: 0.1336
+2026-04-23 12:04:22,789 | INFO     | Processing: digen16_5390
+2026-04-23 12:04:22,813 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:24,391 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:25,888 | INFO     | Early stopping at epoch 19
+2026-04-23 12:04:25,889 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:25,939 | INFO     | Done: digen16_5390 | Acc: 0.5650 | MCC: 0.1388
+2026-04-23 12:04:25,939 | INFO     | Processing: digen17_6949
+2026-04-23 12:04:25,965 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:27,739 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:29,331 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:30,916 | INFO     |   [GPU] Epoch 30 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:31,263 | INFO     | Early stopping at epoch 32
+2026-04-23 12:04:31,264 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:31,322 | INFO     | Done: digen17_6949 | Acc: 0.5200 | MCC: 0.0456
+2026-04-23 12:04:31,322 | INFO     | Processing: digen18_5578
+2026-04-23 12:04:31,346 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:04:32,973 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:34,023 | INFO     | Early stopping at epoch 17
+2026-04-23 12:04:34,024 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:34,073 | INFO     | Done: digen18_5578 | Acc: 0.5850 | MCC: 0.1776
+2026-04-23 12:04:34,073 | INFO     | Processing: digen19_7270
+2026-04-23 12:04:34,098 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:35,649 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:37,247 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:38,890 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:39,048 | INFO     | Early stopping at epoch 31
+2026-04-23 12:04:39,049 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:39,101 | INFO     | Done: digen19_7270 | Acc: 0.4950 | MCC: -0.0101
+2026-04-23 12:04:39,101 | INFO     | Processing: digen1_6265
+2026-04-23 12:04:39,127 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:40,698 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:42,394 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:43,171 | INFO     | Early stopping at epoch 25
+2026-04-23 12:04:43,172 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:43,223 | INFO     | Done: digen1_6265 | Acc: 0.6600 | MCC: 0.3491
+2026-04-23 12:04:43,224 | INFO     | Processing: digen20_5191
+2026-04-23 12:04:43,257 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:04:44,826 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:04:46,404 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:04:47,899 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:04:48,799 | INFO     | Early stopping at epoch 36
+2026-04-23 12:04:48,800 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:04:48,869 | INFO     | Done: digen20_5191 | Acc: 0.5350 | MCC: 0.0708
+2026-04-23 12:04:48,869 | INFO     | Processing: digen21_6265
+2026-04-23 12:04:48,901 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:50,449 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:52,065 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:53,141 | INFO     | Early stopping at epoch 27
+2026-04-23 12:04:53,142 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:04:53,246 | INFO     | Done: digen21_6265 | Acc: 0.5150 | MCC: 0.0313
+2026-04-23 12:04:53,246 | INFO     | Processing: digen22_2433
+2026-04-23 12:04:53,285 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:04:54,853 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:55,152 | INFO     | Early stopping at epoch 12
+2026-04-23 12:04:55,153 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:04:55,237 | INFO     | Done: digen22_2433 | Acc: 0.5300 | MCC: 0.0615
+2026-04-23 12:04:55,237 | INFO     | Processing: digen23_5191
+2026-04-23 12:04:55,263 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:04:56,805 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:04:58,429 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:04:59,160 | INFO     | Early stopping at epoch 25
+2026-04-23 12:04:59,161 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:04:59,208 | INFO     | Done: digen23_5191 | Acc: 0.4600 | MCC: -0.0804
+2026-04-23 12:04:59,209 | INFO     | Processing: digen24_2433
+2026-04-23 12:04:59,251 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 12:05:00,790 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:01,107 | INFO     | Early stopping at epoch 12
+2026-04-23 12:05:01,108 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:01,169 | INFO     | Done: digen24_2433 | Acc: 0.5750 | MCC: 0.1541
+2026-04-23 12:05:01,169 | INFO     | Processing: digen25_2433
+2026-04-23 12:05:01,193 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:02,750 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:04,325 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:05,871 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:07,561 | INFO     |   [GPU] Epoch 40 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:07,562 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:07,613 | INFO     | Done: digen25_2433 | Acc: 0.5700 | MCC: 0.1400
+2026-04-23 12:05:07,613 | INFO     | Processing: digen26_7270
+2026-04-23 12:05:07,648 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:09,263 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:10,801 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:10,945 | INFO     | Early stopping at epoch 21
+2026-04-23 12:05:10,946 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:11,031 | INFO     | Done: digen26_7270 | Acc: 0.5250 | MCC: 0.0501
+2026-04-23 12:05:11,032 | INFO     | Processing: digen27_860
+2026-04-23 12:05:11,092 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:12,602 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:13,986 | INFO     | Early stopping at epoch 19
+2026-04-23 12:05:13,987 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:14,035 | INFO     | Done: digen27_860 | Acc: 0.5100 | MCC: 0.0201
+2026-04-23 12:05:14,035 | INFO     | Processing: digen28_769
+2026-04-23 12:05:14,084 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:15,644 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:17,074 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:18,307 | INFO     | Early stopping at epoch 28
+2026-04-23 12:05:18,308 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:18,358 | INFO     | Done: digen28_769 | Acc: 0.5450 | MCC: 0.0930
+2026-04-23 12:05:18,359 | INFO     | Processing: digen29_8322
+2026-04-23 12:05:18,390 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:19,927 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:20,969 | INFO     | Early stopping at epoch 17
+2026-04-23 12:05:20,971 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:21,019 | INFO     | Done: digen29_8322 | Acc: 0.5100 | MCC: 0.0250
+2026-04-23 12:05:21,019 | INFO     | Processing: digen2_6949
+2026-04-23 12:05:21,044 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 12:05:22,663 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:23,630 | INFO     | Early stopping at epoch 16
+2026-04-23 12:05:23,631 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:23,679 | INFO     | Done: digen2_6949 | Acc: 0.6000 | MCC: 0.2002
+2026-04-23 12:05:23,679 | INFO     | Processing: digen30_4426
+2026-04-23 12:05:23,707 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:25,240 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:25,520 | INFO     | Early stopping at epoch 12
+2026-04-23 12:05:25,521 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:25,591 | INFO     | Done: digen30_4426 | Acc: 0.4950 | MCC: -0.0138
+2026-04-23 12:05:25,591 | INFO     | Processing: digen31_2433
+2026-04-23 12:05:25,615 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:27,138 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:27,295 | INFO     | Early stopping at epoch 11
+2026-04-23 12:05:27,296 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:27,344 | INFO     | Done: digen31_2433 | Acc: 0.5000 | MCC: 0.0000
+2026-04-23 12:05:27,344 | INFO     | Processing: digen32_5191
+2026-04-23 12:05:27,376 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:28,943 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:29,944 | INFO     | Early stopping at epoch 16
+2026-04-23 12:05:29,945 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:29,995 | INFO     | Done: digen32_5191 | Acc: 0.5600 | MCC: 0.1220
+2026-04-23 12:05:29,995 | INFO     | Processing: digen33_769
+2026-04-23 12:05:30,023 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 44MB
+2026-04-23 12:05:31,610 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:33,188 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:33,376 | INFO     | Early stopping at epoch 21
+2026-04-23 12:05:33,377 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:33,432 | INFO     | Done: digen33_769 | Acc: 0.6150 | MCC: 0.2300
+2026-04-23 12:05:33,433 | INFO     | Processing: digen34_769
+2026-04-23 12:05:33,473 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:35,094 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:35,232 | INFO     | Early stopping at epoch 11
+2026-04-23 12:05:35,233 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:35,339 | INFO     | Done: digen34_769 | Acc: 0.5000 | MCC: 0.0000
+2026-04-23 12:05:35,339 | INFO     | Processing: digen35_4426
+2026-04-23 12:05:35,407 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:36,950 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:38,633 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:39,251 | INFO     | Early stopping at epoch 24
+2026-04-23 12:05:39,252 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:39,314 | INFO     | Done: digen35_4426 | Acc: 0.5300 | MCC: 0.0615
+2026-04-23 12:05:39,314 | INFO     | Processing: digen36_466
+2026-04-23 12:05:39,342 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:40,949 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:41,562 | INFO     | Early stopping at epoch 14
+2026-04-23 12:05:41,563 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:41,638 | INFO     | Done: digen36_466 | Acc: 0.5600 | MCC: 0.1209
+2026-04-23 12:05:41,638 | INFO     | Processing: digen37_769
+2026-04-23 12:05:41,676 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:43,310 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:44,584 | INFO     | Early stopping at epoch 18
+2026-04-23 12:05:44,585 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 46MB
+2026-04-23 12:05:44,641 | INFO     | Done: digen37_769 | Acc: 0.5850 | MCC: 0.1747
+2026-04-23 12:05:44,641 | INFO     | Processing: digen38_4426
+2026-04-23 12:05:44,677 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:46,334 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:46,480 | INFO     | Early stopping at epoch 11
+2026-04-23 12:05:46,481 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:46,586 | INFO     | Done: digen38_4426 | Acc: 0.4800 | MCC: -0.0436
+2026-04-23 12:05:46,586 | INFO     | Processing: digen39_5578
+2026-04-23 12:05:46,626 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:48,178 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:49,735 | INFO     | Early stopping at epoch 20
+2026-04-23 12:05:49,736 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:49,784 | INFO     | Done: digen39_5578 | Acc: 0.6450 | MCC: 0.2954
+2026-04-23 12:05:49,784 | INFO     | Processing: digen3_769
+2026-04-23 12:05:49,825 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:51,414 | INFO     |   [GPU] Epoch 10 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:52,948 | INFO     |   [GPU] Epoch 20 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:54,584 | INFO     |   [GPU] Epoch 30 - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:54,735 | INFO     | Early stopping at epoch 31
+2026-04-23 12:05:54,736 | INFO     |   [GPU] After Training - Allocated: 20MB, Reserved: 48MB
+2026-04-23 12:05:54,784 | INFO     | Done: digen3_769 | Acc: 0.6950 | MCC: 0.4075
+2026-04-23 12:05:54,784 | INFO     | Processing: digen40_5390
+2026-04-23 12:05:54,810 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:05:56,290 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:56,849 | INFO     | Early stopping at epoch 14
+2026-04-23 12:05:56,850 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:05:56,900 | INFO     | Done: digen40_5390 | Acc: 0.4950 | MCC: -0.0111
+2026-04-23 12:05:56,901 | INFO     | Processing: digen4_860
+2026-04-23 12:05:56,932 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:05:58,385 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:05:59,972 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:00,447 | INFO     | Early stopping at epoch 23
+2026-04-23 12:06:00,448 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:00,498 | INFO     | Done: digen4_860 | Acc: 0.5150 | MCC: 0.0332
+2026-04-23 12:06:00,498 | INFO     | Processing: digen5_6949
+2026-04-23 12:06:00,540 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:06:02,087 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:02,946 | INFO     | Early stopping at epoch 15
+2026-04-23 12:06:02,947 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:02,995 | INFO     | Done: digen5_6949 | Acc: 0.5450 | MCC: 0.0913
+2026-04-23 12:06:02,995 | INFO     | Processing: digen6_466
+2026-04-23 12:06:03,026 | INFO     |   [GPU] Before Training - Allocated: 19MB, Reserved: 44MB
+2026-04-23 12:06:04,698 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:06:05,640 | INFO     | Early stopping at epoch 16
+2026-04-23 12:06:05,641 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 46MB
+2026-04-23 12:06:05,692 | INFO     | Done: digen6_466 | Acc: 0.5200 | MCC: 0.0405
+2026-04-23 12:06:05,692 | INFO     | Processing: digen7_6949
+2026-04-23 12:06:05,720 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:06:07,304 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:08,942 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:09,114 | INFO     | Early stopping at epoch 21
+2026-04-23 12:06:09,115 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:09,165 | INFO     | Done: digen7_6949 | Acc: 0.5600 | MCC: 0.1243
+2026-04-23 12:06:09,165 | INFO     | Processing: digen8_4426
+2026-04-23 12:06:09,196 | INFO     |   [GPU] Before Training - Allocated: 20MB, Reserved: 44MB
+2026-04-23 12:06:10,818 | INFO     |   [GPU] Epoch 10 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:12,323 | INFO     |   [GPU] Epoch 20 - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:12,497 | INFO     | Early stopping at epoch 21
+2026-04-23 12:06:12,498 | INFO     |   [GPU] After Training - Allocated: 21MB, Reserved: 48MB
+2026-04-23 12:06:12,546 | INFO     | Done: digen8_4426 | Acc: 0.5250 | MCC: 0.0511
+2026-04-23 12:06:12,546 | INFO     | Processing: digen9_7270
+2026-04-23 12:06:12,576 | INFO     |   [GPU] Before Training - Allocated: 18MB, Reserved: 42MB
+2026-04-23 12:06:14,108 | INFO     |   [GPU] Epoch 10 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:06:15,716 | INFO     |   [GPU] Epoch 20 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:06:17,213 | INFO     |   [GPU] Epoch 30 - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:06:17,664 | INFO     | Early stopping at epoch 33
+2026-04-23 12:06:17,665 | INFO     |   [GPU] After Training - Allocated: 19MB, Reserved: 46MB
+2026-04-23 12:06:17,717 | INFO     | Done: digen9_7270 | Acc: 0.6350 | MCC: 0.2723
