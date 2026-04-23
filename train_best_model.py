@@ -218,6 +218,7 @@ def main():
     parser.add_argument("--dataset-root", type=str, required=True, help="Root folder containing 'ours' and 'NCTD' datasets")
     parser.add_argument("--output-dir", type=str, default="best_models_run", help="Output directory")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--full-loading", action="store_true", help="Force full loading into RAM for chunked datasets (faster but uses more memory)")
     args = parser.parse_args()
 
     set_seed(args.seed)
@@ -250,13 +251,23 @@ def main():
         os.makedirs(metrics_dir, exist_ok=True)
         os.makedirs(models_dir, exist_ok=True)
 
-        # Discover datasets
+        # Discover datasets (.pt files, .npz files or directories)
+        items = os.listdir(method_path)
         datasets = []
-        for item in os.listdir(method_path):
-            name = item
-            if name.startswith("processed_"): name = name[len("processed_"):]
-            name = os.path.splitext(name)[0]
-            if name not in datasets: datasets.append(name)
+        for item in items:
+            full_item_path = os.path.join(method_path, item)
+            
+            if os.path.isdir(full_item_path):
+                # For directories, add the name as is
+                if item not in datasets:
+                    datasets.append(item)
+            elif item.endswith(".pt") or item.endswith(".npz"):
+                name = item
+                if name.startswith("processed_"):
+                    name = name[len("processed_"):]
+                name = os.path.splitext(name)[0]
+                if name not in datasets:
+                    datasets.append(name)
         
         logger.info(f"\n{'='*60}\nStarting training for {len(datasets)} datasets using {method.upper()} method.\n{'='*60}")
 
@@ -269,8 +280,16 @@ def main():
             logger.info(f"Processing {ds_name} | Method: {method}")
             
             try:
+                # Automatic detection of chunked datasets
+                dir_path = os.path.join(args.dataset_root, method, ds_name)
+                is_chunked = os.path.isdir(dir_path)
+                
                 # Load Data
-                X, y = load_2d_datasets(ds_name, method, args.dataset_root, logger)
+                X, y = load_2d_datasets(
+                    ds_name, method, args.dataset_root, logger, 
+                    lazy_loading=(is_chunked and not args.full_loading),
+                    full_loading=args.full_loading
+                )
                 num_classes = int(y.unique().numel())
                 num_samples = int(len(y))
                 
