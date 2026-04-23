@@ -329,6 +329,12 @@ def load_2d_datasets(
             if torch.isnan(X).any():
                 log.warning(f"NaN detected in input features (X) for {dataset_filename}. Replacing with zeros.")
                 X = torch.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
+            
+            # Check for extreme values and normalize if necessary
+            x_min, x_max = X.min(), X.max()
+            if x_max > 1e3 or x_min < -1e3:
+                log.warning(f"Extreme values detected in {dataset_filename} (min={x_min:.2f}, max={x_max:.2f}). Scaling to [0, 1].")
+                X = (X - x_min) / (x_max - x_min + 1e-8)
             log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}")
             return X, y
     else:
@@ -340,6 +346,12 @@ def load_2d_datasets(
         if torch.isnan(X).any():
             log.warning(f"NaN detected in input features (X) for {dataset_filename}. Replacing with zeros.")
             X = torch.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
+        
+        # Check for extreme values and normalize if necessary
+        x_min, x_max = X.min(), X.max()
+        if x_max > 1e3 or x_min < -1e3:
+            log.warning(f"Extreme values detected in {dataset_filename} (min={x_min:.2f}, max={x_max:.2f}). Scaling to [0, 1].")
+            X = (X - x_min) / (x_max - x_min + 1e-8)
         log.debug(f"X={tuple(X.shape)}  y={tuple(y.shape)}  classes={y.unique().numel()}")
         return X, y
 

@@ -218,16 +218,29 @@ def main():
             logger.warning(f"Method path {method_path} does not exist. Skipping.")
             continue
         
-        # Discover datasets (.npz files or directories)
+        # Discover datasets (.pt files, .npz files or directories)
         items = os.listdir(method_path)
         datasets = []
         for item in items:
             full_item_path = os.path.join(method_path, item)
-            if item.endswith(".npz"):
-                datasets.append(item)
-            elif os.path.isdir(full_item_path):
-                # For directories, the code expects the name without extension usually
-                datasets.append(item)
+            
+            if os.path.isdir(full_item_path):
+                # For directories, add the name as is
+                if item not in datasets:
+                    datasets.append(item)
+            elif item.endswith(".pt") or item.endswith(".npz"):
+                # For files, we need the canonical name that load_2d_datasets expects.
+                # It automatically adds 'processed_' and '.pt' during loading, 
+                # so we strip them here to avoid double-prefixing.
+                name = item
+                if name.startswith("processed_"):
+                    name = name[len("processed_"):]
+                
+                # Strip extension (e.g. .pt or .npz)
+                name = os.path.splitext(name)[0]
+                
+                if name not in datasets:
+                    datasets.append(name)
 
         logger.info(f"Starting standardized training for method: {method.upper()} ({len(datasets)} datasets)")
         
