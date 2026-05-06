@@ -150,10 +150,20 @@ def train_eval_rnn(X_train, y_train, X_val, y_val, params, num_classes):
     return best_val_acc
 
 def objective_ml(trial, X, y, model_name, num_classes):
+    # Split the data into training and validation sets
     try:
-        X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+        X_train, X_val, y_train, y_val = train_test_split(
+            X, y, test_size=0.2, stratify=y, random_state=42
+        )
     except ValueError:
-        X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+        X_train, X_val, y_train, y_val = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
+
+    # Ensure the training data contains at least two classes for classification
+    if len(np.unique(y_train)) < 2:
+        # Not enough classes; return a neutral score to allow Optuna to continue
+        return 0.0
     
     if model_name == 'LR':
         C = trial.suggest_float('C', 1e-5, 1e2, log=True)
@@ -271,6 +281,8 @@ def train_final_model_and_evaluate(X_train, y_train, X_test, y_test, model_name,
         elif model_name == 'XGBoost':
             model = xgb.XGBClassifier(**best_params, use_label_encoder=False, eval_metric='logloss', random_state=42)
             
+        if len(np.unique(y_train)) < 2:
+            raise ValueError(f"Cannot fit model '{model_name}': Training data has only 1 class. Check data imbalance or split size.")
         model.fit(X_train, y_train)
         
         # Save model
@@ -287,11 +299,19 @@ def run_tuning_for_dataset(dataset_file, model_names, n_trials=100):
     ds_name = os.path.splitext(os.path.basename(dataset_file))[0]
     X, y = load_data(dataset_file)
     num_classes = len(np.unique(y))
+    if num_classes < 2:
+        print(f"Skipping {ds_name}: Only {num_classes} class found. Classification requires at least 2.")
+        return
     
     try:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
     except ValueError:
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Check if the resulting training set is valid for classification
+    if len(np.unique(y_train)) < 2:
+        print(f"Skipping {ds_name}: Training split contains only one class. (Imbalanced data?)")
+        return
         
     for model_name in model_names:
         output_dir = os.path.join(RESULTS_DIR, model_name, ds_name)
