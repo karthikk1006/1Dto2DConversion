@@ -74,43 +74,64 @@ def get_logger(name, log_file):
     return logger
 
 def load_data(filepath):
-    # allow_pickle=True is needed for some datasets that store data as object arrays (e.g. digen)
     try:
         data = np.load(filepath, allow_pickle=True)
+        X = data['X']
+        y = data['y']
     except Exception as e:
-        # Fallback for older numpy or specific cases
-        data = np.load(filepath)
+        print(f"Error loading {filepath}: {e}")
+        return None, None
         
-    X = data['X']
-    y = data['y']
-    
-    # Handle datasets with headers in the first row (common in 'digen' files)
-    if X.dtype == object or y.dtype == object:
-        try:
-            # Check if first element of y is a string (header)
-            if isinstance(y[0], str):
-                X = X[1:]
-                y = y[1:]
-        except:
-            pass
+    # Standardize X and y to 1D/2D
+    if X.ndim == 1:
+        X = X.reshape(-1, 1)
+    y = y.flatten()
+
+    # Robust header removal: Many datasets have a 'target' header in the first row
+    if y.dtype == object or (len(y) > 0 and isinstance(y[0], str)):
+        # Identify non-numeric rows
+        numeric_mask = []
+        for val in y:
+            try:
+                float(val)
+                numeric_mask.append(True)
+            except (ValueError, TypeError):
+                numeric_mask.append(False)
         
-        # Try to convert to proper numeric types
-        try:
-            X = X.astype(np.float64)
-            y = y.astype(np.int64)
-        except Exception as e:
-            # If conversion fails, we might have mixed types or bad data
-            pass
+        numeric_mask = np.array(numeric_mask)
+        if not np.all(numeric_mask):
+            X = X[numeric_mask]
+            y = y[numeric_mask]
     
+    if len(y) == 0:
+        return None, None
+
+    # Now convert to numeric
+    try:
+        X = X.astype(np.float64)
+        y = y.astype(np.float64).astype(np.int64)
+    except Exception as e:
+        # Fallback if some values are still not convertible
+        valid_indices = []
+        for i, val in enumerate(y):
+            try:
+                float(val)
+                valid_indices.append(i)
+            except:
+                continue
+        X = X[valid_indices].astype(np.float64)
+        y = y[valid_indices].astype(np.float64).astype(np.int64)
+
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
+    
+    # Scale features
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
     
+    # Map labels to 0..N-1
     unique_labels = np.unique(y)
     mapping = {val: i for i, val in enumerate(np.sort(unique_labels))}
-    mapped_y = np.copy(y)
-    for old_val, new_val in mapping.items():
-        mapped_y[y == old_val] = new_val
+    mapped_y = np.array([mapping[val] for val in y], dtype=np.int64)
         
     return X, mapped_y
 
@@ -130,8 +151,8 @@ def compute_metrics(y_true, y_pred, y_prob, num_classes):
         "precision": float(precision_score(y_true, y_pred, average=avg_setting, zero_division=0)),
         "recall": float(recall_score(y_true, y_pred, average=avg_setting, zero_division=0)),
         "roc_auc": roc_auc,
-        "mcc": float(matthews_corrcoef(y_true, y_pred)),
-        "cohen_kappa": float(cohen_kappa_score(y_true, y_pred))
+        "mcc": float(matthews_corrcoef(y_true, y_pred)) if len(np.unique(y_true)) > 1 else 0.0,
+        "cohen_kappa": float(cohen_kappa_score(y_true, y_pred)) if len(np.unique(y_true)) > 1 else 0.0
     }
     return metrics
 
@@ -213,7 +234,12 @@ def objective_ml(trial, X, y, model_name, num_classes):
     
     if model_name == 'LR':
         C = trial.suggest_float('C', 1e-5, 1e2, log=True)
-        solver = trial.suggest_categorical('solver', ['lbfgs', 'liblinear'])
+        # 'liblinear' does not support multiclass (n_classes >= 3)
+        if num_classes > 2:
+            solver = trial.suggest_categorical('solver', ['lbfgs', 'newton-cg', 'sag', 'saga'])
+        else:
+            solver = trial.suggest_categorical('solver', ['lbfgs', 'liblinear'])
+            
         model = LogisticRegression(C=C, solver=solver, max_iter=1000, random_state=42)
         model.fit(X_train, y_train)
         return accuracy_score(y_val, model.predict(X_val))
@@ -359,6 +385,10 @@ def run_tuning_for_dataset(dataset_file, model_names, n_trials=100):
     ds_name = os.path.splitext(os.path.basename(dataset_file))[0]
     X, y = load_data(dataset_file)
     
+    if X is None or y is None or len(X) == 0:
+        print(f"Skipping {ds_name}: Could not load data or empty dataset.")
+        return
+
     if len(X) != len(y):
         print(f"Skipping {ds_name}: Inconsistent sample counts (X: {len(X)}, y: {len(y)})")
         return
@@ -385,35 +415,41 @@ def run_tuning_for_dataset(dataset_file, model_names, n_trials=100):
         logger = get_logger(f"{model_name}_{ds_name}", os.path.join(output_dir, "tuning.log"))
         logger.info(f"Starting {model_name} on {ds_name} (Classes: {num_classes}, Samples: {len(y)})")
         
-        study = optuna.create_study(direction="maximize")
-        study.optimize(lambda trial: objective_ml(trial, X_train, y_train, model_name, num_classes), n_trials=n_trials, n_jobs=1)
-        
-        best_params = study.best_params
-        if model_name == 'RNN':
-            best_params['epochs'] = 30
+        try:
+            study = optuna.create_study(direction="maximize")
+            study.optimize(lambda trial: objective_ml(trial, X_train, y_train, model_name, num_classes), n_trials=n_trials, n_jobs=1)
             
-        logger.info(f"Best params for {model_name}: {best_params}")
-        
-        model_ext = ".pt" if model_name == "RNN" else ".pkl"
-        model_save_path = os.path.join(output_dir, f"best_model{model_ext}")
-        
-        train_results, test_results = train_final_model_and_evaluate(
-            X_train, y_train, X_test, y_test, model_name, best_params, num_classes, model_save_path
-        )
-        
-        train_metrics = compute_metrics(train_results[0], train_results[1], train_results[2], num_classes)
-        test_metrics = compute_metrics(test_results[0], test_results[1], test_results[2], num_classes)
-        
-        with open(os.path.join(output_dir, "metrics_train.json"), "w") as f:
-            json.dump(train_metrics, f, indent=4)
+            best_params = study.best_params
+            if model_name == 'RNN':
+                best_params['epochs'] = 30
+                
+            logger.info(f"Best params for {model_name}: {best_params}")
             
-        with open(os.path.join(output_dir, "metrics_test.json"), "w") as f:
-            json.dump(test_metrics, f, indent=4)
+            model_ext = ".pt" if model_name == "RNN" else ".pkl"
+            model_save_path = os.path.join(output_dir, f"best_model{model_ext}")
             
-        with open(os.path.join(output_dir, "best_params.json"), "w") as f:
-            json.dump(best_params, f, indent=4)
+            train_results, test_results = train_final_model_and_evaluate(
+                X_train, y_train, X_test, y_test, model_name, best_params, num_classes, model_save_path
+            )
             
-        logger.info(f"Test Accuracy: {test_metrics['accuracy']:.4f}")
+            train_metrics = compute_metrics(train_results[0], train_results[1], train_results[2], num_classes)
+            test_metrics = compute_metrics(test_results[0], test_results[1], test_results[2], num_classes)
+            
+            with open(os.path.join(output_dir, "metrics_train.json"), "w") as f:
+                json.dump(train_metrics, f, indent=4)
+                
+            with open(os.path.join(output_dir, "metrics_test.json"), "w") as f:
+                json.dump(test_metrics, f, indent=4)
+                
+            with open(os.path.join(output_dir, "best_params.json"), "w") as f:
+                json.dump(best_params, f, indent=4)
+                
+            logger.info(f"Test Accuracy: {test_metrics['accuracy']:.4f}")
+        except Exception as e:
+            logger.error(f"Failed to tune/evaluate {model_name} on {ds_name}: {str(e)}")
+            import traceback
+            logger.debug(traceback.format_exc())
+            continue
 
 if __name__ == "__main__":
     print_gpu_banner()   # Show GPU/CPU device info before anything else
