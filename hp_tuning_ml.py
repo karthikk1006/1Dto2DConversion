@@ -26,6 +26,27 @@ import joblib
 # Suppress warnings
 warnings.filterwarnings('ignore')
 
+# ── GPU / Device Setup ───────────────────────────────────────────────────────
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+USE_GPU = torch.cuda.is_available()
+
+def print_gpu_banner():
+    """Print a clear banner showing which device will be used for training."""
+    sep = "=" * 60
+    print(sep)
+    if USE_GPU:
+        gpu_name = torch.cuda.get_device_name(0)
+        gpu_mem  = torch.cuda.get_device_properties(0).total_memory / (1024 ** 3)
+        print(f"  🚀  GPU DETECTED — Training will use GPU")
+        print(f"      Device : {gpu_name}")
+        print(f"      VRAM   : {gpu_mem:.1f} GB")
+        print(f"      Models benefiting: RNN (full GPU), XGBoost (GPU hist)")
+        print(f"      Note   : LR / CART / ID3 / RF use scikit-learn (CPU)")
+    else:
+        print(f"  ⚠️   No GPU found — Training will use CPU")
+        print(f"      Install CUDA + matching PyTorch build to enable GPU.")
+    print(sep)
+
 DATA_DIR = "datasets"
 RESULTS_DIR = "results_ml"
 _RUN_TS = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -53,9 +74,33 @@ def get_logger(name, log_file):
     return logger
 
 def load_data(filepath):
-    data = np.load(filepath)
+    # allow_pickle=True is needed for some datasets that store data as object arrays (e.g. digen)
+    try:
+        data = np.load(filepath, allow_pickle=True)
+    except Exception as e:
+        # Fallback for older numpy or specific cases
+        data = np.load(filepath)
+        
     X = data['X']
     y = data['y']
+    
+    # Handle datasets with headers in the first row (common in 'digen' files)
+    if X.dtype == object or y.dtype == object:
+        try:
+            # Check if first element of y is a string (header)
+            if isinstance(y[0], str):
+                X = X[1:]
+                y = y[1:]
+        except:
+            pass
+        
+        # Try to convert to proper numeric types
+        try:
+            X = X.astype(np.float64)
+            y = y.astype(np.int64)
+        except Exception as e:
+            # If conversion fails, we might have mixed types or bad data
+            pass
     
     X = np.nan_to_num(X, nan=0.0, posinf=0.0, neginf=0.0)
     scaler = StandardScaler()
@@ -103,13 +148,14 @@ class SimpleRNN(nn.Module):
         return out
 
 def train_eval_rnn(X_train, y_train, X_val, y_val, params, num_classes):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = DEVICE
     train_ds = TensorDataset(torch.FloatTensor(X_train), torch.LongTensor(y_train))
     val_ds = TensorDataset(torch.FloatTensor(X_val), torch.LongTensor(y_val))
     
     batch_size = params.get('batch_size', 64)
-    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
+    # pin_memory speeds up host→GPU transfers when a CUDA device is available
+    train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True, pin_memory=USE_GPU)
+    val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False, pin_memory=USE_GPU)
     
     model = SimpleRNN(
         input_dim=X_train.shape[1],
@@ -197,7 +243,17 @@ def objective_ml(trial, X, y, model_name, num_classes):
         n_estimators = trial.suggest_int('n_estimators', 50, 300)
         max_depth = trial.suggest_int('max_depth', 3, 15)
         learning_rate = trial.suggest_float('learning_rate', 1e-3, 0.3, log=True)
-        model = xgb.XGBClassifier(n_estimators=n_estimators, max_depth=max_depth, learning_rate=learning_rate, use_label_encoder=False, eval_metric='logloss', random_state=42)
+        xgb_kwargs = dict(
+            n_estimators=n_estimators,
+            max_depth=max_depth,
+            learning_rate=learning_rate,
+            eval_metric='logloss',
+            random_state=42,
+        )
+        if USE_GPU:
+            xgb_kwargs['device'] = 'cuda'
+            xgb_kwargs['tree_method'] = 'hist'   # GPU-accelerated histogram method
+        model = xgb.XGBClassifier(**xgb_kwargs)
         model.fit(X_train, y_train)
         return accuracy_score(y_val, model.predict(X_val))
         
@@ -216,13 +272,13 @@ def objective_ml(trial, X, y, model_name, num_classes):
 
 def train_final_model_and_evaluate(X_train, y_train, X_test, y_test, model_name, best_params, num_classes, model_save_path):
     if model_name == 'RNN':
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = DEVICE
         train_ds = TensorDataset(torch.FloatTensor(X_train), torch.LongTensor(y_train))
         test_ds = TensorDataset(torch.FloatTensor(X_test), torch.LongTensor(y_test))
         
         batch_size = best_params.get('batch_size', 64)
-        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False)
-        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False)
+        train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=False, pin_memory=USE_GPU)
+        test_loader = DataLoader(test_ds, batch_size=batch_size, shuffle=False, pin_memory=USE_GPU)
         
         model = SimpleRNN(
             input_dim=X_train.shape[1],
@@ -237,7 +293,7 @@ def train_final_model_and_evaluate(X_train, y_train, X_test, y_test, model_name,
         
         epochs = best_params.get('epochs', 30)
         # Re-create a shuffle train loader for training
-        train_loader_shuffle = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
+        train_loader_shuffle = DataLoader(train_ds, batch_size=batch_size, shuffle=True, pin_memory=USE_GPU)
         for epoch in range(epochs):
             model.train()
             for Xb, yb in train_loader_shuffle:
@@ -279,7 +335,11 @@ def train_final_model_and_evaluate(X_train, y_train, X_test, y_test, model_name,
         elif model_name == 'RF':
             model = RandomForestClassifier(**best_params, random_state=42)
         elif model_name == 'XGBoost':
-            model = xgb.XGBClassifier(**best_params, use_label_encoder=False, eval_metric='logloss', random_state=42)
+            xgb_final_kwargs = dict(**best_params, eval_metric='logloss', random_state=42)
+            if USE_GPU:
+                xgb_final_kwargs['device'] = 'cuda'
+                xgb_final_kwargs['tree_method'] = 'hist'
+            model = xgb.XGBClassifier(**xgb_final_kwargs)
             
         if len(np.unique(y_train)) < 2:
             raise ValueError(f"Cannot fit model '{model_name}': Training data has only 1 class. Check data imbalance or split size.")
@@ -298,6 +358,11 @@ def train_final_model_and_evaluate(X_train, y_train, X_test, y_test, model_name,
 def run_tuning_for_dataset(dataset_file, model_names, n_trials=100):
     ds_name = os.path.splitext(os.path.basename(dataset_file))[0]
     X, y = load_data(dataset_file)
+    
+    if len(X) != len(y):
+        print(f"Skipping {ds_name}: Inconsistent sample counts (X: {len(X)}, y: {len(y)})")
+        return
+
     num_classes = len(np.unique(y))
     if num_classes < 2:
         print(f"Skipping {ds_name}: Only {num_classes} class found. Classification requires at least 2.")
@@ -351,6 +416,8 @@ def run_tuning_for_dataset(dataset_file, model_names, n_trials=100):
         logger.info(f"Test Accuracy: {test_metrics['accuracy']:.4f}")
 
 if __name__ == "__main__":
+    print_gpu_banner()   # Show GPU/CPU device info before anything else
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset', type=str, default=None, help='Specific dataset to run')
     parser.add_argument('--n_trials', type=int, default=100, help='Number of Optuna trials')
