@@ -5,11 +5,12 @@ from torch.utils.data import Dataset
 from sklearn.model_selection import train_test_split
 
 class Tabular2ImageDataset(Dataset):
-    def __init__(self, X, y, transform=None, indices=None):
+    def __init__(self, X, y, transform=None, indices=None, input_channels=1):
         self.X = X
         self.y = y.long()
         self.transform = transform
         self.indices = indices
+        self.input_channels = input_channels
         
         # Remap labels to be 0-indexed and contiguous
         unique_labels = torch.unique(self.y)
@@ -35,6 +36,15 @@ class Tabular2ImageDataset(Dataset):
         # Ensure grayscale if needed (1, H, W)
         if img.dim() == 2:
             img = img.unsqueeze(0)
+            
+        # Handle channel mismatch
+        if img.shape[0] != self.input_channels:
+            if self.input_channels == 1:
+                # Convert 3-channel to 1-channel (grayscale)
+                img = img.mean(dim=0, keepdim=True)
+            elif self.input_channels == 3:
+                # Convert 1-channel to 3-channel (repeat)
+                img = img.repeat(3, 1, 1)
 
         if self.transform:
             img = self.transform(img)

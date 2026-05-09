@@ -27,8 +27,8 @@ def objective(trial, args, X, y, num_classes, device):
     train_idx, test_idx = safe_stratified_split(range(num_samples), y, test_size=0.2, random_state=args.seed)
     train_idx, val_idx = safe_stratified_split(train_idx, y[train_idx], test_size=0.125, random_state=args.seed)
 
-    train_ds = Tabular2ImageDataset(X, y, indices=train_idx)
-    val_ds = Tabular2ImageDataset(X, y, indices=val_idx)
+    train_ds = Tabular2ImageDataset(X, y, indices=train_idx, input_channels=args.input_channels)
+    val_ds = Tabular2ImageDataset(X, y, indices=val_idx, input_channels=args.input_channels)
 
     train_loader = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=batch_size, shuffle=False)
